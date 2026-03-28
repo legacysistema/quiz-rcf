@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#07070c">
+<title>Rodrigo Costa — Encontre seu Pacote Ideal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+:root{
+  --bg:#07070c;--bg2:#0c0c14;--bg3:#11111c;
+  --card:rgba(13,13,22,0.96);
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.11);
+  --gold:#d4a843;--gold2:#f0c96a;
+  --cyan:#00d9f5;--green:#00e49a;--wa:#25D366;
+  --text:#ededf4;--muted:#6e6e8a;
+  --shadow:0 32px 80px rgba(0,0,0,0.75);
+  --glow-gold:0 0 28px rgba(212,168,67,0.22),0 0 70px rgba(212,168,67,0.07);
+  --glow-cyan:0 0 22px rgba(0,217,245,0.22),0 0 55px rgba(0,217,245,0.08);
+  --glow-green:0 0 22px rgba(0,228,154,0.28),0 0 55px rgba(0,228,154,0.09);
+  --font-serif:'DM Serif Display',serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-ui:'Poppins',sans-serif;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);font-weight:400;line-height:1.6;
+  min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:.45;
+}
+body::after{
+  content:'';position:fixed;top:25%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(ellipse,rgba(212,168,67,0.05) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── HEADER ── */
+.header{
+  position:sticky;top:0;z-index:900;
+  background:rgba(7,7,12,0.88);
+  backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-bottom:1px solid rgba(212,168,67,0.10);
+  padding:0 20px;
+  padding-top:var(--safe-top);
+  height:calc(60px + var(--safe-top));
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-family:var(--font-ui);font-size:17px;font-weight:400;color:rgba(255,255,255,0.88);display:flex;flex-direction:column;line-height:1.15;}
+.logo strong{font-weight:700;color:#fff;}
+.logo span{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:rgba(212,168,67,0.75);font-weight:400;}
+.header-wa{
+  font-size:13px;color:var(--muted);text-decoration:none;
+  display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-weight:500;
+  padding:8px 14px;border-radius:20px;border:1px solid rgba(37,211,102,0.18);
+  background:rgba(37,211,102,0.04);transition:all .2s;
+}
+.header-wa:hover,.header-wa:active{color:var(--wa);border-color:rgba(37,211,102,0.4);}
+.header-wa i{font-size:15px;color:var(--wa);}
+
+/* ── PAGE ── */
+.page{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:center;padding:28px 12px calc(80px + var(--safe-bottom));}
+
+/* ── QUIZ CARD ── */
+.quiz-card{
+  background:var(--card);border:1px solid rgba(212,168,67,0.13);
+  border-radius:22px;width:100%;max-width:560px;
+  backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+  box-shadow:var(--shadow),0 0 0 1px rgba(255,255,255,0.025);overflow:hidden;
+}
+.quiz-topbar{
+  height:3px;
+  background:linear-gradient(90deg,transparent 0%,rgba(212,168,67,0.3) 10%,var(--gold) 45%,var(--gold2) 55%,rgba(212,168,67,0.3) 90%,transparent 100%);
+}
+.quiz-inner{padding:28px 24px 32px;}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:26px;}
+.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px;font-family:var(--font-ui);letter-spacing:.3px;}
+.progress-bar{height:2px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .45s cubic-bezier(.4,0,.2,1);}
+
+/* ── STEP ── */
+.step{display:none;}
+.step.active{display:block;animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.step-eyebrow{
+  font-family:var(--font-ui);font-size:10px;font-weight:600;
+  color:var(--gold);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:7px;display:flex;align-items:center;gap:6px;
+}
+.step-eyebrow::before{content:'';width:18px;height:1px;background:var(--gold);opacity:.4;}
+.question{font-family:var(--font-serif);font-size:22px;font-weight:400;color:#fff;margin-bottom:18px;line-height:1.3;}
+
+/* ── OPTIONS ── */
+.options{display:grid;gap:8px;}
+
+/* ── OPTION CARD ── */
+.option{
+  display:flex;flex-direction:column;
+  border:1px solid var(--border2);border-radius:16px;cursor:pointer;
+  background:rgba(255,255,255,0.02);
+  transition:border-color .2s,background .2s;
+  overflow:hidden;
+  /* no transform on mobile — feels laggy */
+  -webkit-user-select:none;user-select:none;
+}
+.option:active{background:rgba(212,168,67,0.05);}
+.option.selected{border-color:var(--gold);background:rgba(212,168,67,0.06);}
+
+.opt-main{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;
+}
+.opt-icon{
+  width:40px;height:40px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  color:var(--gold);transition:background .2s;
+}
+.option.selected .opt-icon{background:rgba(212,168,67,0.12);border-color:rgba(212,168,67,0.3);}
+.opt-label-wrap{flex:1;}
+.opt-label{font-size:14px;font-weight:600;color:var(--text);line-height:1.25;}
+.opt-sub{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.option.selected .opt-label{color:var(--gold2);}
+.opt-check{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--border2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;transition:all .2s;
+}
+.option.selected .opt-check{background:var(--gold);border-color:var(--gold);color:#07070c;}
+
+/* ── INFO INLINE (aparece após seleção) ── */
+.opt-info{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1), padding .3s ease;
+  border-top:0px solid rgba(212,168,67,0.1);
+}
+.option.selected .opt-info{
+  max-height:400px;
+  border-top-width:1px;
+  padding:12px 16px 14px;
+}
+.opt-info-title{
+  font-size:10px;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--gold);font-weight:600;font-family:var(--font-ui);
+  margin-bottom:9px;display:flex;align-items:center;gap:5px;
+}
+.opt-info-title i{font-size:11px;}
+.opt-info-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.opt-info-list li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:12.5px;color:var(--muted);line-height:1.5;
+}
+.opt-info-list li i{color:var(--green);font-size:11px;margin-top:2px;flex-shrink:0;}
+.opt-info-list li strong{color:var(--text);font-weight:600;}
+
+/* ── NAV BUTTONS ── */
+.nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:10px;}
+.btn-back{
+  padding:12px 18px;background:transparent;
+  border:1px solid var(--border2);border-radius:12px;color:var(--muted);
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:var(--font-ui);transition:all .2s;
+  display:flex;align-items:center;gap:6px;min-height:48px;
+}
+.btn-back:active{border-color:rgba(255,255,255,0.22);color:var(--text);}
+.btn-next{
+  flex:1;padding:14px 24px;min-height:52px;
+  background:linear-gradient(135deg,rgba(212,168,67,0.15),rgba(212,168,67,0.07));
+  border:1px solid rgba(212,168,67,0.28);border-radius:12px;color:var(--gold);
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:var(--font-ui);transition:all .2s;
+  opacity:.28;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-next.ok{opacity:1;pointer-events:all;}
+.btn-next.ok:active{
+  background:linear-gradient(135deg,rgba(212,168,67,0.24),rgba(212,168,67,0.13));
+  border-color:var(--gold);box-shadow:var(--glow-gold);
+}
+
+/* ── LOADING ── */
+.loading-state{text-align:center;padding:48px 20px;}
+.loading-spinner{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid rgba(212,168,67,0.15);border-top-color:var(--gold);
+  animation:spin 0.8s linear infinite;margin:0 auto 18px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-size:13px;color:var(--muted);font-family:var(--font-ui);}
+
+/* ── RESULT ── */
+.result-hero{
+  position:relative;width:calc(100% + 48px);margin:-28px -24px 0;
+  background:var(--bg3);min-height:200px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.result-hero-carousel-track{position:absolute;inset:0;display:flex;transition:transform .4s ease;}
+.result-hero-carousel-track img{width:100%;height:100%;object-fit:cover;object-position:top center;flex-shrink:0;}
+.result-hero-placeholder{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:52px;flex-shrink:0;color:var(--gold);
+  background:linear-gradient(135deg,rgba(212,168,67,0.06),rgba(0,217,245,0.04));
+}
+.result-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,7,12,0) 40%,rgba(7,7,12,0.82) 100%);}
+.result-hero-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;}
+.result-hero-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,0.3);transition:width .2s,background .2s;cursor:pointer;}
+.result-hero-dot.active{width:16px;background:#fff;}
+.r-match-badge{
+  position:absolute;top:14px;right:14px;z-index:2;
+  background:rgba(0,228,154,0.15);border:1px solid rgba(0,228,154,0.32);
+  color:var(--green);font-size:11px;font-weight:700;
+  padding:4px 12px;border-radius:20px;font-family:var(--font-ui);letter-spacing:.3px;
+}
+.r-cat{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;font-family:var(--font-ui);font-weight:600;margin-top:26px;}
+.r-name{font-family:var(--font-serif);font-size:26px;color:#fff;margin-bottom:10px;line-height:1.2;}
+.r-why{font-size:13px;color:var(--muted);line-height:1.65;padding:11px 14px;background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;}
+.r-price{font-family:var(--font-serif);font-size:34px;color:var(--green);margin-bottom:3px;text-shadow:0 0 40px rgba(0,228,154,0.25);}
+.r-base{font-size:12px;color:var(--muted);margin-bottom:18px;}
+
+.r-incluso-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;font-weight:600;display:flex;align-items:center;gap:5px;font-family:var(--font-ui);}
+.r-incluso-title i{color:var(--green);}
+.r-incluso{list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:7px;}
+.r-incluso li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--text);padding:2px 0;}
+.r-incluso li i{color:var(--green);font-size:11px;margin-top:3px;flex-shrink:0;}
+
+.r-extras-section{margin-bottom:18px;display:none;}
+.r-extras-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;font-weight:600;display:flex;align-items:center;gap:5px;font-family:var(--font-ui);}
+.r-extras-title i{color:var(--gold);}
+.r-extra-item{display:flex;align-items:center;gap:11px;padding:12px 13px;border:1px solid var(--border);border-radius:11px;cursor:pointer;background:rgba(255,255,255,0.02);margin-bottom:7px;transition:border-color .2s,background .2s;}
+.r-extra-item.checked{border-color:rgba(212,168,67,0.38);background:rgba(212,168,67,0.05);}
+.r-extra-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex-shrink:0;transition:all .2s;}
+.r-extra-item.checked .r-extra-check{background:var(--gold);border-color:var(--gold);color:#07070c;}
+.r-extra-name{font-size:13px;color:var(--text);flex:1;font-weight:500;}
+.r-extra-price{font-size:13px;color:var(--gold);font-weight:600;font-family:var(--font-ui);}
+
+.r-total-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,228,154,0.05);border:1px solid rgba(0,228,154,0.13);border-radius:12px;margin-bottom:18px;}
+.r-total-label{font-size:12px;color:var(--muted);font-family:var(--font-ui);}
+.r-total-val{font-family:var(--font-serif);font-size:22px;color:var(--green);text-shadow:0 0 24px rgba(0,228,154,0.2);}
+
+.r-faq{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:15px 17px;margin-bottom:20px;}
+.r-faq-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:5px;font-family:var(--font-ui);}
+.r-faq-title i{color:var(--cyan);}
+.r-faq-item{padding:9px 0;border-bottom:1px solid var(--border);}
+.r-faq-item:last-child{border-bottom:none;padding-bottom:0;}
+.r-faq-q{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.r-faq-a{font-size:12px;color:var(--muted);line-height:1.55;}
+.r-faq-a strong{color:var(--text);}
+.r-divider{height:1px;background:var(--border);margin:20px 0;}
+
+/* ── CTAs ── */
+.btn-modal-open{
+  width:100%;padding:17px;
+  background:linear-gradient(135deg,rgba(212,168,67,0.18),rgba(212,168,67,0.08));
+  border:1px solid rgba(212,168,67,0.42);border-radius:16px;
+  color:var(--gold);font-size:15px;font-weight:700;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .2s;margin-bottom:9px;
+  box-shadow:0 4px 28px rgba(212,168,67,0.12),inset 0 1px 0 rgba(212,168,67,0.15);
+  min-height:56px;letter-spacing:.2px;
+}
+.btn-modal-open:active{background:linear-gradient(135deg,rgba(212,168,67,0.28),rgba(212,168,67,0.14));box-shadow:var(--glow-gold);}
+.btn-wa-result{
+  width:100%;padding:15px;min-height:52px;
+  background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.22);
+  border-radius:14px;color:var(--wa);font-size:14px;font-weight:600;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;transition:all .2s;margin-bottom:9px;
+}
+.btn-wa-result:active{background:rgba(37,211,102,0.14);border-color:var(--wa);}
+.btn-restart{
+  width:100%;padding:12px;min-height:48px;
+  background:transparent;border:1px solid var(--border2);
+  border-radius:12px;color:var(--muted);font-size:13px;font-weight:500;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;margin-top:4px;
+}
+
+/* outros */
+.outros-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;font-weight:600;font-family:var(--font-ui);}
+.outro-card{display:flex;align-items:center;gap:11px;padding:13px 13px;border:1px solid var(--border);border-radius:12px;cursor:pointer;margin-bottom:7px;background:rgba(255,255,255,0.015);transition:border-color .2s,background .2s;}
+.outro-card:active{border-color:rgba(212,168,67,0.28);background:rgba(212,168,67,0.035);}
+.outro-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:rgba(212,168,67,0.07);border:1px solid rgba(212,168,67,0.13);color:var(--gold);}
+.outro-info{flex:1;}
+.outro-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.outro-price{font-size:12px;color:var(--muted);}
+.outro-arr{color:var(--muted);font-size:12px;}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+@media(min-width:600px){
+  .modal-overlay{align-items:center;padding:16px;}
+}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal-box{
+  background:rgba(9,9,16,0.97);
+  border:1px solid rgba(0,217,245,0.12);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:600px;
+  max-height:92vh;overflow-y:auto;
+  transform:translateY(40px);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1);position:relative;
+  backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);
+  box-shadow:var(--glow-cyan),0 -24px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(0,217,245,0.07);
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.07) transparent;
+  padding-bottom:var(--safe-bottom);
+}
+@media(min-width:600px){
+  .modal-box{border-radius:24px;transform:scale(.96) translateY(20px);}
+  .modal-overlay.active .modal-box{transform:scale(1) translateY(0);}
+}
+.modal-box::-webkit-scrollbar{width:3px;}
+.modal-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.07);border-radius:3px;}
+.modal-overlay.active .modal-box{transform:translateY(0);}
+
+/* drag handle */
+.modal-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);margin:12px auto 0;cursor:pointer;}
+
+.modal-close{
+  position:absolute;top:16px;right:16px;z-index:10;
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.07);color:var(--text);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:15px;transition:background .2s;
+}
+.modal-close:active{background:rgba(255,255,255,.14);}
+.modal-carousel{position:relative;width:100%;padding-top:56.25%;overflow:hidden;background:var(--bg3);}
+.modal-carousel-track{position:absolute;inset:0;display:flex;transition:transform .35s ease;}
+.modal-carousel-track img{width:100%;height:100%;object-fit:cover;object-position:top center;flex-shrink:0;}
+.modal-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:52px;flex-shrink:0;}
+.modal-carousel-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:50%;border:none;
+  background:rgba(0,0,0,.65);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:background .2s;z-index:5;
+}
+.modal-carousel-nav.prev{left:12px;}
+.modal-carousel-nav.next{right:12px;}
+.modal-carousel-dots{position:absolute;bottom:11px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5;}
+.modal-carousel-dots .dot{width:7px;height:7px;border-radius:4px;background:rgba(255,255,255,.28);transition:width .2s,background .2s;cursor:pointer;}
+.modal-carousel-dots .dot.active{width:20px;background:#fff;}
+.modal-body{padding:22px 22px 26px;}
+.modal-cat{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-family:var(--font-ui);}
+.modal-title{font-family:var(--font-serif);font-size:24px;font-weight:400;margin-bottom:14px;line-height:1.2;color:#fff;}
+.modal-price{font-family:var(--font-serif);font-size:36px;color:var(--green);margin-bottom:4px;letter-spacing:-0.5px;}
+.modal-price-base{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.modal-desc{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:20px;}
+.incluso-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-weight:600;}
+.incluso-title i{color:var(--green);}
+.incluso-list{list-style:none;margin-bottom:20px;}
+.incluso-list li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;padding:5px 0;color:var(--text);}
+.incluso-list li i{color:var(--green);font-size:11px;margin-top:3px;flex-shrink:0;}
+.extras-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-family:var(--font-ui);font-weight:600;}
+.extras-list{margin-bottom:20px;}
+.extra-item{display:flex;align-items:center;gap:11px;padding:12px 13px;border:1px solid var(--border);border-radius:11px;cursor:pointer;margin-bottom:7px;background:rgba(255,255,255,0.02);transition:border-color .2s,background .2s;}
+.extra-item.checked{border-color:rgba(0,217,245,0.35);background:rgba(0,217,245,0.04);}
+.extra-item input[type=checkbox]{display:none;}
+.extra-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex-shrink:0;transition:all .2s;}
+.extra-item.checked .extra-check{background:var(--cyan);border-color:var(--cyan);color:#07070c;}
+.extra-name{font-size:13px;color:var(--text);flex:1;font-weight:500;}
+.extra-price{font-size:13px;color:var(--cyan);font-weight:600;font-family:var(--font-ui);}
+.modal-total-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,228,154,0.05);border:1px solid rgba(0,228,154,0.13);border-radius:12px;margin-bottom:18px;}
+.total-label{font-size:12px;color:var(--muted);font-family:var(--font-ui);}
+.total-val{font-family:var(--font-serif);font-size:22px;color:var(--green);}
+.cta-buttons{display:flex;flex-direction:column;gap:9px;}
+.btn-wa-modal{
+  width:100%;padding:16px;min-height:56px;
+  background:linear-gradient(135deg,rgba(37,211,102,0.15),rgba(37,211,102,0.07));
+  border:1px solid rgba(37,211,102,0.28);border-radius:14px;color:var(--wa);
+  font-size:15px;font-weight:700;font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .2s;box-shadow:0 4px 20px rgba(37,211,102,0.09);
+}
+.btn-wa-modal:active{background:linear-gradient(135deg,rgba(37,211,102,0.24),rgba(37,211,102,0.14));border-color:var(--wa);box-shadow:0 8px 32px rgba(37,211,102,0.2);}
+.btn-pix-modal{
+  width:100%;padding:16px;min-height:52px;
+  background:linear-gradient(135deg,rgba(0,217,245,0.12),rgba(0,217,245,0.06));
+  border:1px solid rgba(0,217,245,0.24);border-radius:14px;color:var(--cyan);
+  font-size:15px;font-weight:700;font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;
+}
+.btn-pix-modal:active{background:linear-gradient(135deg,rgba(0,217,245,0.2),rgba(0,217,245,0.1));border-color:var(--cyan);}
+.pix-status{display:none;text-align:center;padding:10px;border-radius:10px;background:rgba(0,228,154,0.08);border:1px solid rgba(0,228,154,0.2);color:var(--green);font-size:13px;font-family:var(--font-ui);}
+.pix-status.show{display:block;}
+
+/* ── FIXED BOTTOM BAR ── */
+.fixed-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:800;
+  background:rgba(7,7,12,0.94);
+  border-top:1px solid rgba(0,217,245,0.1);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  padding:10px 16px;
+  padding-bottom:calc(10px + var(--safe-bottom));
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.fixed-bar.visible{transform:translateY(0);}
+.fixed-bar-inner{max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.fixed-price-label{font-size:10px;color:var(--muted);font-family:var(--font-ui);letter-spacing:.5px;}
+.fixed-price-val{font-family:var(--font-serif);font-size:19px;color:var(--green);}
+.fixed-actions{display:flex;gap:7px;}
+.fixed-btn-wa{padding:10px 16px;min-height:44px;border-radius:10px;border:none;background:rgba(37,211,102,0.15);color:var(--wa);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:background .2s;display:flex;align-items:center;gap:6px;}
+.fixed-btn-pix{padding:10px 16px;min-height:44px;border-radius:10px;border:none;background:rgba(0,217,245,0.12);color:var(--cyan);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:background .2s;display:flex;align-items:center;gap:6px;}
+
+/* ── SKELETON ── */
+.opt-skeleton{
+  height:58px;border-radius:14px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 100%);
+  background-size:200% 100%;animation:shimmer 1.4s infinite;
+  border:1px solid var(--border);
+}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:18px;font-size:11px;color:var(--muted);position:relative;z-index:1;letter-spacing:.5px;font-family:var(--font-ui);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:420px){
+  .quiz-inner{padding:22px 16px 26px;}
+  .question{font-size:20px;}
+  .result-hero{width:calc(100% + 32px);margin:-22px -16px 0;}
+  .r-price{font-size:28px;}
+  .modal-body{padding:18px 16px 22px;}
+  .modal-title{font-size:21px;}
+  .header{padding:0 16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div><strong>Rodrigo Costa</strong></div>
+    <span>Fotografia</span>
+  </div>
+  <a class="header-wa" href="https://wa.me/5522992497662" target="_blank" rel="noopener">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </a>
+</header>
+
+<div class="page">
+  <div class="quiz-card">
+    <div class="quiz-topbar"></div>
+    <div class="quiz-inner">
+
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="pMeta">Passo 1 de 3</span>
+          <span id="pPct">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+      </div>
+
+      <!-- ══ STEP 1 — Tipo ══ -->
+      <div class="step active" id="s1">
+        <div class="step-eyebrow">Encontre seu pacote</div>
+        <div class="question">Que tipo de registro você está buscando?</div>
+        <div class="options">
+          <div class="option" onclick="pick(this,'tipo','ensaio','s1')">
+            <div class="opt-main">
+              <div class="opt-icon"><i class="fas fa-camera"></i></div>
+              <div class="opt-label-wrap">
+                <div class="opt-label">Ensaio fotográfico</div>
+                <div class="opt-sub">Sessão em estúdio · fundo clean · entrega em 5 dias</div>
+              </div>
+              <div class="opt-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="opt-info">
+              <div class="opt-info-title"><i class="fas fa-circle-info"></i> O que você precisa saber</div>
+              <ul class="opt-info-list">
+                <li><i class="fas fa-circle-check"></i><span>Sessão em estúdio com <strong>fundo clean profissional</strong></span></li>
+                <li><i class="fas fa-circle-check"></i><span>Seleção online das fotos favoritas</span></li>
+                <li><i class="fas fa-circle-check"></i><span>Entrega em <strong>5 dias úteis</strong> via Google Drive</span></li>
+                <li><i class="fas fa-circle-check"></i><span>Reserva com <strong>Pix ou cartão</strong></span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="option" onclick="pick(this,'tipo','evento','s1')">
+            <div class="opt-main">
+              <div class="opt-icon"><i class="fas fa-star"></i></div>
+              <div class="opt-label-wrap">
+                <div class="opt-label">Cobertura de evento</div>
+                <div class="opt-sub">Aniversário · debutante · cobertura completa</div>
+              </div>
+              <div class="opt-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="opt-info">
+              <div class="opt-info-title"><i class="fas fa-circle-info"></i> O que você precisa saber</div>
+              <ul class="opt-info-list">
+                <li><i class="fas fa-circle-check"></i><span>Cobertura do <strong>início ao parabéns</strong></span></li>
+                <li><i class="fas fa-circle-check"></i><span>Entrega em <strong>7 dias</strong> via Portal do Cliente</span></li>
+                <li><i class="fas fa-circle-check"></i><span><strong>Sem limite</strong> de fotos entregues</span></li>
+                <li><i class="fas fa-circle-check"></i><span>Todos os detalhes registrados</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="nav-row">
+          <div></div>
+          <button class="btn-next" id="btn1" onclick="goStep(2)">
+            Próximo <i class="fas fa-arrow-right" style="font-size:11px"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 2 — Subtipo ══ -->
+      <div class="step" id="s2">
+        <div class="step-eyebrow" id="s2-eyebrow">Detalhe o perfil</div>
+        <div class="question" id="q2">Para quem é o ensaio?</div>
+        <div class="options" id="opts2"></div>
+        <div class="nav-row">
+          <button class="btn-back" onclick="goStep(1)">
+            <i class="fas fa-arrow-left" style="font-size:11px"></i> Voltar
+          </button>
+          <button class="btn-next" id="btn2" onclick="goStep(3)">
+            Próximo <i class="fas fa-arrow-right" style="font-size:11px"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3 — Pacote infantil / Duração evento ══ -->
+      <div class="step" id="s3">
+        <div class="step-eyebrow" id="s3-eyebrow">Escolha o pacote</div>
+        <div class="question" id="q3">Qual pacote combina com você?</div>
+        <div class="options" id="opts3"></div>
+        <div class="nav-row">
+          <button class="btn-back" onclick="goStep(2)">
+            <i class="fas fa-arrow-left" style="font-size:11px"></i> Voltar
+          </button>
+          <button class="btn-next" id="btn3" onclick="showResult()">
+            Ver meu pacote <i class="fas fa-wand-magic-sparkles" style="font-size:11px"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4 — Seleção de pacote (quando há múltiplos) ══ -->
+      <div class="step" id="s4">
+        <div class="step-eyebrow" id="s4-eyebrow">Escolha o pacote</div>
+        <div class="question" id="q4">Qual pacote você prefere?</div>
+        <div class="options" id="opts4"></div>
+        <div class="nav-row">
+          <button class="btn-back" id="btn4back" onclick="goStepBack()">
+            <i class="fas fa-arrow-left" style="font-size:11px"></i> Voltar
+          </button>
+          <button class="btn-next" id="btn4" onclick="confirmPackageSelection()">
+            Ver meu pacote <i class="fas fa-wand-magic-sparkles" style="font-size:11px"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ RESULT ══ -->
+      <div class="step" id="sResult">
+        <div id="resultLoading" class="loading-state">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Buscando o melhor pacote para você…</div>
+        </div>
+        <div id="resultContent" style="display:none;">
+          <div class="result-hero" id="rHero">
+            <div class="result-hero-carousel-track" id="rHeroTrack">
+              <div class="result-hero-placeholder" id="rHeroPlaceholder"><i class="fas fa-camera-retro"></i></div>
+            </div>
+            <div class="result-hero-overlay"></div>
+            <div class="result-hero-dots" id="rHeroDots"></div>
+            <div class="r-match-badge" id="rBadge">Pacote recomendado</div>
+          </div>
+          <div class="r-cat" id="rCat"></div>
+          <div class="r-name" id="rName">—</div>
+          <div class="r-why" id="rWhy">—</div>
+          <div class="r-price" id="rPrice">—</div>
+          <div class="r-base" id="rBase"></div>
+          <div class="r-incluso-title"><i class="fas fa-circle-check"></i> O que está incluso</div>
+          <ul class="r-incluso" id="rIncluso"></ul>
+          <div class="r-extras-section" id="rExtrasSection">
+            <div class="r-extras-title"><i class="fas fa-circle-plus"></i> Adicione ao pacote (opcional)</div>
+            <div id="rExtrasList"></div>
+          </div>
+          <div class="r-total-bar">
+            <div><div class="r-total-label">Total do pedido</div></div>
+            <div class="r-total-val" id="rTotal">R$ 0,00</div>
+          </div>
+          <div class="r-faq" id="rFaq">
+            <div class="r-faq-title"><i class="fas fa-circle-question"></i> Perguntas sobre este pacote</div>
+            <div id="rFaqItems"></div>
+          </div>
+          <div class="r-divider"></div>
+          <button class="btn-modal-open" id="btnAbrirModal" onclick="abrirModalProduto()">
+            <i class="fas fa-magnifying-glass-plus"></i> Ver pacote completo e garantir minha data
+          </button>
+          <a class="btn-wa-result" id="btnWA" href="https://wa.me/5522992497662" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Tirar dúvidas pelo WhatsApp
+          </a>
+          <div class="r-divider"></div>
+          <div class="outros-title" id="rOutrosTitulo" style="display:none;">Outros pacotes compatíveis</div>
+          <div id="rOutros"></div>
+          <button class="btn-restart" onclick="restart()">
+            <i class="fas fa-rotate-left"></i> Refazer questionário
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="footer">© 2025 Rodrigo Costa Fotografia · Cabo Frio, RJ</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="prodModal" onclick="modalClickOut(event)">
+  <div class="modal-box" id="prodModalBox">
+    <div class="modal-handle" onclick="closeModal()"></div>
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+    <div class="modal-carousel" id="modalCarouselWrap">
+      <div class="modal-carousel-track" id="modalCarouselTrack"></div>
+      <button class="modal-carousel-nav prev" id="modalPrev" onclick="modalMove(-1)" style="display:none;"><i class="fas fa-chevron-left"></i></button>
+      <button class="modal-carousel-nav next" id="modalNext" onclick="modalMove(1)" style="display:none;"><i class="fas fa-chevron-right"></i></button>
+      <div class="modal-carousel-dots" id="modalDots"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cat" id="modalCat"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-price" id="modalTotalVal">R$ 0,00</div>
+      <div class="modal-price-base" id="modalPriceBase"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div id="modalInclusoSection" style="display:none;">
+        <div class="incluso-title"><i class="fas fa-circle-check"></i> O que está incluso</div>
+        <ul class="incluso-list" id="modalInclusoList"></ul>
+      </div>
+      <div id="modalExtrasSection" style="display:none;">
+        <div class="extras-title">Adicione ao pacote (opcional)</div>
+        <div class="extras-list" id="modalExtrasList"></div>
+      </div>
+      <div class="modal-total-bar">
+        <div><div class="total-label">Total do pedido</div></div>
+        <div class="total-val" id="modalTotal">R$ 0,00</div>
+      </div>
+      <div class="cta-buttons">
+        <button class="btn-wa-modal" id="modalBtnWA" onclick="openWA()"><i class="fab fa-whatsapp"></i> Falar no WhatsApp e reservar minha data</button>
+        <button class="btn-pix-modal" id="modalBtnPix" onclick="copyPix()" style="display:none;"><i class="fas fa-bolt-lightning"></i> Reservar agora com Pix</button>
+        <div class="pix-status" id="pixStatus"><i class="fas fa-circle-check"></i> Chave Pix copiada!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FIXED BAR -->
+<div class="fixed-bar" id="fixedBar">
+  <div class="fixed-bar-inner">
+    <div>
+      <div class="fixed-price-label">Total selecionado</div>
+      <div class="fixed-price-val" id="fixedTotal">R$ 0,00</div>
+    </div>
+    <div class="fixed-actions">
+      <button class="fixed-btn-wa" onclick="openWA()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button class="fixed-btn-pix" onclick="copyPix()" id="fixedBtnPix" style="display:none;"><i class="fas fa-bolt-lightning"></i> Pix</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══ SUPABASE ═══ */
+var _su = atob('aHR0cHM6Ly9sZWRwcWN5bnZxYmRiY2NlYmhiby5zdXBhYmFzZS5jbw==');
+var _sk = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW14bFpIQnhZM2x1ZG5GaVpHSmpZMlZpYUdKdklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpBek9EYzNNamdzSW1WNGNDSTZNakE0TlRrMk16Y3lPSDAuczhHT3pwNHdvdWpHdURjNHZLOVFYSWYzY1dMTUVOVW5KZkU0bHRfWWhMZw==');
+var _db = window.supabase.createClient(_su, _sk);
+
+/* ═══ STATE ═══ */
+var A = {};
+var _allProds = [];
+var _matched = null;
+var _others  = [];
+var _cp = null, _cbp = 0, _mci = 0, _mi = [], _rhi = 0, _rhi_imgs = [];
+var _selectedExtras = {};
+
+/* ═══ HELPERS ═══ */
+function ge(id){ return document.getElementById(id); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fMoney(v){
+  var n=v;
+  if(typeof n==='string'){var s=n.trim();if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');n=parseFloat(s);}
+  return 'R$ '+parseFloat(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function bImgs(p){
+  var i=[];['imagem_url','imagem2_url','imagem3_url','imagem4_url','imagem5_url']
+    .forEach(function(k){if(p[k]&&p[k].trim())i.push(p[k].trim());});
+  return i;
+}
+function pIncluso(raw){
+  if(!raw)return[];if(Array.isArray(raw))return raw;
+  return raw.split(/\n/).map(function(l){return l.trim();}).filter(function(l){return l.length>1;});
+}
+function pExtras(raw){
+  if(!raw)return[];
+  try{var j=JSON.parse(raw);if(Array.isArray(j))return j;}catch(_){}
+  var items=[],re=/([^,(;]+?)\s*\(\+?\s*R?\$?\s*([\d.]+(?:[,.][\d]+)?)\s*\)/gi,m;
+  while((m=re.exec(raw))!==null){
+    var name=m[1].trim(),ns=m[2].trim();
+    if(ns.includes(','))ns=ns.replace(/\./g,'').replace(',','.');
+    var price=parseFloat(ns);
+    if(name&&!isNaN(price))items.push({name:name,price:price});
+  }
+  return items;
+}
+function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+
+/* ═══ CATEGORY MAPPING ═══ */
+/* Mapeia as respostas do quiz para a coluna "categoria" do Supabase.
+   Como todos os infantis vivem em "Ensaio Infantil", a distinção
+   com bolo / sem bolo é feita 100% pelo nome do produto (ver NAME_RULES). */
+var CAT_MAP = {
+  /* ENSAIOS */
+  ensaio_infantil_combolo:  ['Ensaio Infantil','Smash the Cake'],
+  ensaio_infantil_sembolo:  ['Ensaio Infantil'],
+  ensaio_kids:              ['Ensaio Kids','Ensaio Infantil'],
+  ensaio_teen:              ['Ensaio Teen'],
+  ensaio_adulto:            ['Ensaio Adulto'],
+  ensaio_familia:           ['Ensaio Família'],
+  ensaio_profissional:      ['Ensaio Profissional'],
+  /* EVENTOS — Tradicionais com filtro por duração via nome do pacote */
+  evento_tradicional:       ['Tradicionais'],
+  evento_tradicional_2h:    ['Tradicionais'],   /* só pacotes de 2h */
+  evento_tradicional_3h:    ['Tradicionais'],   /* pacotes de 2h e 3h */
+  evento_tradicional_4h:    ['Tradicionais'],   /* pacotes de 3h e 4h */
+  evento_festare:           ['Festare & Full House','Tradicionais'],  /* se vier só 'Tradicionais', NAME_RULES exclui pelo nome */
+  evento_debutante:         ['Debutante']
+};
+
+/* ═══ REGRAS POR NOME ═══
+   include: produto PRECISA ter ao menos uma dessas palavras no nome.
+   exclude: produto é DESCARTADO se o nome contiver qualquer dessas palavras.
+   Busca no nome + descrição, sem acento, minúsculo.
+*/
+var NAME_RULES = {
+  ensaio_infantil_combolo: {
+    include: ['smash','bolo','cake','confete','tematico','tematik'],
+    exclude: []
+  },
+  ensaio_infantil_sembolo: {
+    include: [],
+    exclude: ['smash','bolo','cake','confete']
+  },
+  /* Tradicionais: exclui pacotes Festare/Full House pelo nome */
+  evento_tradicional:   { include:[], exclude:['festare','full house','fullhouse'] },
+  evento_tradicional_2h:{ include:[], exclude:['festare','full house','fullhouse'] },
+  evento_tradicional_3h:{ include:[], exclude:['festare','full house','fullhouse'] },
+  evento_tradicional_4h:{ include:[], exclude:['festare','full house','fullhouse'] },
+  /* Festare: exige palavras de festare/full house no nome OU categoria exata */
+  evento_festare:       { include:['festare','full house','fullhouse'], exclude:[] }
+};
+
+/* ═══ SCORING ═══ */
+function scoreProduct(p, key){
+  var cats = CAT_MAP[key] || [];
+  var pCat = norm(p.categoria);
+
+  /* 1. Categoria precisa bater */
+  var catMatch = cats.some(function(c){ return norm(c) === pCat; });
+  if(!catMatch) return -1;
+
+  /* 2. Aplica regras de nome — busca APENAS no nome do produto (não na descrição)
+        para evitar falsos positivos quando a descrição menciona outra modalidade */
+  var pNome = norm(p.nome||'');
+  var rules = NAME_RULES[key];
+  /* Para Festare: se categoria é exatamente 'Festare & Full House', dispensa include por nome */
+  var exactCatFestare = (key === 'evento_festare' && pCat === norm('Festare & Full House'));
+  if(rules && !exactCatFestare){
+    /* exclude: nome contém palavra proibida → fora */
+    if(rules.exclude && rules.exclude.length){
+      if(rules.exclude.some(function(w){ return pNome.includes(w); })) return -1;
+    }
+    /* include: lista não-vazia e nenhuma palavra bate → fora */
+    if(rules.include && rules.include.length){
+      if(!rules.include.some(function(w){ return pNome.includes(w); })) return -1;
+    }
+  } else if(rules && exactCatFestare){
+    /* categoria exata Festare: só aplica exclude */
+    if(rules.exclude && rules.exclude.length){
+      if(rules.exclude.some(function(w){ return pNome.includes(w); })) return -1;
+    }
+  }
+
+  /* 3. Score base + bônus de relevância */
+  var score = 60;
+  /* bônus: palavra de include encontrada no nome */
+  if(rules && rules.include && rules.include.length){
+    score += 30; /* já passou o filtro include, então sempre dá bônus */
+  }
+  /* bônus extra para sem-bolo: palavras típicas de bebê */
+  if(key === 'ensaio_infantil_sembolo'){
+    var babyWords = ['basico','essencial','memo','tradicional','baby','bebe'];
+    if(babyWords.some(function(w){ return pNome.includes(w); })) score += 20;
+  }
+  return score;
+}
+
+/* ═══ FAQ DATA ═══ */
+var FAQ = {
+  ensaio:{
+    result:[
+      {q:'Quantos dias para entrega?',a:'<strong>5 dias úteis</strong> após a sua seleção online.'},
+      {q:'Como é feita a entrega?',a:'Via <strong>link do Google Drive</strong> enviado pelo WhatsApp.'},
+      {q:'Como funciona a seleção?',a:'Você recebe um <strong>link exclusivo</strong> para escolher suas fotos favoritas.'}
+    ]
+  },
+  evento:{
+    result:[
+      {q:'Quantos dias para entrega?',a:'<strong>7 dias</strong> após o evento.'},
+      {q:'Tem limite de fotos?',a:'<strong>Não</strong> — todas as fotos boas do evento.'},
+      {q:'Os detalhes da mesa são fotografados?',a:'<strong>Sim!</strong> Detalhes, decoração e momentos especiais.'},
+      {q:'Forma de pagamento',a:'<strong>Reserva via Pix.</strong> Restante no dia: cartão até 2x sem juros, débito ou dinheiro.'}
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════
+   STEP 2 CONFIG
+   key → { q, eyebrow, opts:[{icon,label,sub,info:[],v}] }
+═══════════════════════════════════════ */
+var S2 = {
+  ensaio:{
+    eyebrow:'Para quem é',
+    q:'Para quem é o ensaio?',
+    opts:[
+      {
+        i:'fas fa-baby',
+        l:'Infantil',
+        sub:'1 a 3 anos · temático · pais participam',
+        v:'infantil',
+        info:[
+          'Sessão temática de até <strong>40 minutos</strong>',
+          'Pais participam e podem entrar na sessão',
+          'Looks temáticos de 1 ano disponíveis no estúdio',
+          'Seleção online · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-child-reaching',
+        l:'Kids',
+        sub:'4 a 12 anos · fundo clean · pais participam',
+        v:'kids',
+        info:[
+          'Sessão de até <strong>40 minutos</strong>',
+          'Fundo clean profissional',
+          'Pais podem participar da sessão',
+          '20 fotos editadas · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-star',
+        l:'Teen',
+        sub:'13 a 17 anos · até 3 looks · fundo clean',
+        v:'teen',
+        info:[
+          'Sessão de <strong>1 hora</strong>',
+          'Até <strong>3 trocas de look</strong>',
+          'Apenas o(a) modelo — fundo clean',
+          '20 fotos editadas · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-user',
+        l:'Adulto',
+        sub:'18+ · até 3 looks · fundo clean',
+        v:'adulto',
+        info:[
+          'Sessão de <strong>1 hora</strong>',
+          'Até <strong>3 trocas de look</strong>',
+          'Apenas o(a) modelo — fundo clean',
+          'Seleção online · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-people-roof',
+        l:'Família',
+        sub:'Até 4 pessoas · 1 look · fundo clean',
+        v:'familia',
+        info:[
+          'Sessão de <strong>1 hora</strong> com até <strong>4 pessoas</strong>',
+          '<strong>1 troca de look</strong> — fundo clean',
+          '20 fotos editadas · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-briefcase',
+        l:'Profissional',
+        sub:'Corporativo · até 3 looks · fundo clean',
+        v:'profissional',
+        info:[
+          'Sessão de <strong>1 hora</strong>',
+          'Até <strong>3 trocas de look</strong> — fundo clean',
+          'Apenas o(a) modelo',
+          'Seleção online · entrega em <strong>5 dias</strong>'
+        ]
+      }
+    ]
+  },
+  evento:{
+    eyebrow:'Tipo de evento',
+    q:'Como é o seu evento?',
+    opts:[
+      {
+        i:'fas fa-cake-candles',
+        l:'Aniversários Tradicionais',
+        sub:'Buffets, clubes e salões de festa',
+        v:'tradicional',
+        info:[
+          'Cobertura do <strong>início ao parabéns</strong>',
+          'Todos os momentos e detalhes registrados',
+          'Entrega em <strong>7 dias</strong> via Portal do Cliente',
+          'Sem limite de fotos entregues'
+        ]
+      },
+      {
+        i:'fas fa-champagne-glasses',
+        l:'Festare & Full House',
+        sub:'Casas de festa com pacote fixo de 2 horas',
+        v:'festare',
+        info:[
+          'Cobertura de <strong>2 horas</strong> — cobertura completa',
+          'Chega antes do parabéns para registrar a chegada',
+          'Entrega em <strong>7 dias</strong> via Portal do Cliente',
+          'Sem limite de fotos'
+        ]
+      },
+      {
+        i:'fas fa-crown',
+        l:'Debutante',
+        sub:'15 anos · 5 horas de cobertura',
+        v:'debutante',
+        info:[
+          '<strong>5 horas</strong> de cobertura completa',
+          'Válido para: Megaplay, Playpinho, Luluca, Divinos, Magia e Sonho, ChicaBoom, Avy, Dream House',
+          'Outros locais: consultar valor',
+          'Entrega em <strong>7 dias</strong> via Portal do Cliente'
+        ]
+      }
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════
+   STEP 3 CONFIG — por subtipo
+   Para infantil: pergunta "com bolo ou sem bolo?"
+   Para eventos: duração
+   Para os demais ensaios: vai direto ao resultado (s3 é skipped)
+═══════════════════════════════════════ */
+var S3 = {
+  ensaio_infantil:{
+    eyebrow:'Tipo de ensaio',
+    q:'Qual tipo de ensaio infantil você imagina?',
+    opts:[
+      {
+        i:'fas fa-cake-candles',
+        l:'Com bolo — Smash the Cake',
+        sub:'Ensaio com bolo incluso ou temático de bolo',
+        v:'combolo',
+        info:[
+          'Pacotes com <strong>bolo artístico incluso</strong>',
+          'Opção com banheira de confetes',
+          'De 20 a 40 fotos editadas',
+          'Álbum premium disponível'
+        ]
+      },
+      {
+        i:'fas fa-baby',
+        l:'Sem bolo — Ensaio Bebê',
+        sub:'Temático, memo ou clássico sem bolo',
+        v:'sembolo',
+        info:[
+          'Ensaios temáticos de <strong>1 ano</strong>',
+          'Opções com álbum impresso',
+          'De 20 a 40 fotos editadas',
+          'Pais participam da sessão'
+        ]
+      }
+    ]
+  },
+  evento_tradicional:{
+    eyebrow:'Duração do evento',
+    q:'Qual a duração prevista do seu evento?',
+    opts:[
+      {i:'fas fa-hourglass-half', l:'2 horas de cobertura', sub:'Festas menores ou início mais tarde', v:'2h', info:['Cobertura começa 2h antes do horário do parabéns']},
+      {i:'fas fa-clock',          l:'3 horas de cobertura', sub:'Festas de até 4 horas de duração',    v:'3h', info:['Ex: parabéns às 22h → fotógrafo chega às <strong>19h</strong>']},
+      {i:'fas fa-hourglass',      l:'4 horas de cobertura', sub:'Festas de até 5 horas de duração',    v:'4h', info:['Cobertura completa do salão ao parabéns']}
+    ]
+  },
+  evento_festare:{
+    eyebrow:'Cobertura',
+    q:'Festare & Full House — cobertura de 2 horas',
+    opts:[
+      {i:'fas fa-champagne-glasses', l:'2 horas de cobertura', sub:'Padrão para Festare e Full House', v:'2h', info:['Cobertura completa: chegada, decoração, festa e parabéns']}
+    ]
+  },
+  evento_debutante:{
+    eyebrow:'Cobertura',
+    q:'Debutante — cobertura de 5 horas',
+    opts:[
+      {i:'fas fa-crown', l:'5 horas de cobertura', sub:'Pacote completo para debutantes', v:'5h', info:['Cobertura completa: entrada, valsa, coroação e festa']}
+    ]
+  }
+};
+
+/* ═══ QUIZ FLOW ═══ */
+var _totalSteps = 3; // steps dinâmicos conforme tipo
+
+function buildOptHTML(opts, key, stepId){
+  return opts.map(function(o){
+    var infoHtml = '';
+    if(o.info && o.info.length){
+      infoHtml = '<div class="opt-info">'
+        +'<div class="opt-info-title"><i class="fas fa-circle-check"></i> Detalhes deste pacote</div>'
+        +'<ul class="opt-info-list">'
+        + o.info.map(function(it){ return '<li><i class="fas fa-circle-check"></i><span>'+it+'</span></li>'; }).join('')
+        +'</ul></div>';
+    }
+    return '<div class="option" onclick="pick(this,\''+key+'\',\''+o.v+'\',\''+stepId+'\')">'
+      +'<div class="opt-main">'
+      +'<div class="opt-icon"><i class="'+o.i+'"></i></div>'
+      +'<div class="opt-label-wrap">'
+      +'<div class="opt-label">'+o.l+'</div>'
+      +(o.sub?'<div class="opt-sub">'+o.sub+'</div>':'')
+      +'</div>'
+      +'<div class="opt-check"><i class="fas fa-check"></i></div>'
+      +'</div>'
+      + infoHtml
+      +'</div>';
+  }).join('');
+}
+
+function buildStep2(){
+  var cfg = S2[A.tipo] || S2.ensaio;
+  ge('s2-eyebrow').textContent = cfg.eyebrow;
+  ge('q2').textContent = cfg.q;
+  ge('opts2').innerHTML = buildOptHTML(cfg.opts, 'subtipo', 's2');
+  A.subtipo = null;
+  ge('btn2').classList.remove('ok');
+}
+
+function buildStep3(){
+  /* Determina qual config de S3 usar */
+  var key = '';
+  if(A.tipo === 'ensaio'){
+    if(A.subtipo === 'infantil') key = 'ensaio_infantil';
+    /* demais subtipos de ensaio vão direto ao resultado no step3 — mostrar opções genéricas */
+    else key = null;
+  } else if(A.tipo === 'evento'){
+    key = 'evento_' + (A.subtipo || 'tradicional');
+  }
+
+  if(!key){
+    /* Para teen, adulto, familia, profissional: step3 mostra opção única e avança */
+    ge('s3-eyebrow').textContent = 'Confirmação';
+    ge('q3').textContent = 'Pronto! Vamos buscar seu pacote.';
+    ge('opts3').innerHTML = '<div class="option selected" id="opt3auto">'
+      +'<div class="opt-main">'
+      +'<div class="opt-icon" style="color:var(--green);background:rgba(0,228,154,0.1);border-color:rgba(0,228,154,0.2);"><i class="fas fa-circle-check"></i></div>'
+      +'<div class="opt-label-wrap"><div class="opt-label" style="color:var(--gold2);">Buscar meu pacote ideal</div>'
+      +'<div class="opt-sub">Baseado no seu perfil</div></div>'
+      +'<div class="opt-check" style="background:var(--gold);border-color:var(--gold);color:#07070c;"><i class="fas fa-check"></i></div>'
+      +'</div></div>';
+    A.duracao = 'auto';
+    ge('btn3').classList.add('ok');
+    return;
+  }
+
+  var cfg = S3[key];
+  if(!cfg){ A.duracao='auto'; ge('btn3').classList.add('ok'); return; }
+  ge('s3-eyebrow').textContent = cfg.eyebrow;
+  ge('q3').textContent = cfg.q;
+  ge('opts3').innerHTML = buildOptHTML(cfg.opts, 'duracao', 's3');
+  A.duracao = null;
+  ge('btn3').classList.remove('ok');
+
+  /* se só tem 1 opção, seleciona automaticamente */
+  if(cfg.opts.length === 1){
+    setTimeout(function(){
+      var opt = ge('opts3').querySelector('.option');
+      if(opt){ opt.click(); }
+    }, 120);
+  }
+}
+
+window.pick = function(el, key, val, stepId){
+  el.closest('.options').querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  A[key] = val;
+  var n = stepId.replace('s','');
+  var btn = ge('btn'+n);
+  if(btn) btn.classList.add('ok');
+  if(key === 'tipo'){ buildStep2(); }
+  if(key === 'subtipo'){ buildStep3(); }
+};
+
+window.goStep = function(n){
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  ge('s'+n).classList.add('active');
+  var total = 3;
+  var pct = Math.round(((n-1)/total)*100);
+  ge('pFill').style.width = pct+'%';
+  ge('pMeta').textContent = 'Passo '+(n > total ? total : n)+' de '+total;
+  ge('pPct').textContent = pct+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+/* ═══ SHOW RESULT ═══ */
+var _scoredPackages = [];
+var _selectedPackageIdx = null;
+
+window.showResult = function(){
+  ge('resultLoading').style.display = 'block';
+  ge('resultContent').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  function proceed(){
+    var key = resolveKey();
+    var cats = CAT_MAP[key] || [];
+    var scored = _allProds.map(function(p){
+      return {p:p, score:scoreProduct(p, key)};
+    }).filter(function(x){ return x.score > 0; });
+    scored.sort(function(a,b){ return b.score - a.score; });
+
+    if(!scored.length){
+      /* Fallback: mesmas regras de nome, só abre categoria */
+      if(key === 'ensaio_infantil_combolo' || key === 'ensaio_infantil_sembolo'){
+        /* Para infantil nunca ignoramos as regras de nome no fallback */
+        scored = _allProds.filter(function(p){
+          return norm(p.categoria) === 'ensaio infantil' && scoreProduct(p, key) > 0;
+        }).map(function(p){ return {p:p,score:20}; });
+      } else {
+        var fallbackCats = A.tipo === 'evento'
+          ? ['Tradicionais','Debutante','Festare & Full House']
+          : ['Ensaio Adulto','Ensaio Infantil','Ensaio Família','Ensaio Teen','Ensaio Profissional','Ensaio Kids'];
+        scored = _allProds.filter(function(p){
+          var pCat = norm(p.categoria);
+          return fallbackCats.some(function(c){ return norm(c)===pCat; });
+        }).map(function(p){ return {p:p,score:30}; });
+      }
+    }
+
+    /* Para tradicionais: filtra/limita por duração escolhida */
+    if(A.tipo === 'evento' && A.subtipo === 'tradicional'){
+      scored = filterTradicionalByDuracao(scored, A.duracao);
+    }
+
+    _scoredPackages = scored;
+
+    /* Se há mais de 1 pacote, mostrar seleção */
+    if(scored.length > 1){
+      buildPackageStep(scored);
+    } else {
+      /* Único pacote: vai direto ao resultado */
+      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+      ge('sResult').classList.add('active');
+      ge('pFill').style.width = '100%';
+      ge('pMeta').textContent = 'Resultado';
+      ge('pPct').textContent = '100%';
+      renderResult(scored);
+    }
+  }
+
+  if(_allProds.length){ proceed(); return; }
+  _db.from('marketplace_produtos')
+    .select('id,nome,descricao,preco,imagem_url,imagem2_url,imagem3_url,imagem4_url,imagem5_url,categoria,vendedor_nome,status,whatsapp,pix_key,incluso,extras')
+    .eq('status','ativo')
+    .order('data_criacao',{ascending:false})
+    .then(function(r){
+      if(r.error||!r.data||!r.data.length){
+        document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+        ge('sResult').classList.add('active');
+        ge('resultLoading').innerHTML='<div class="loading-text" style="color:var(--muted)">Não foi possível carregar os pacotes. <a href="https://wa.me/5522992497662" style="color:var(--gold)">Fale pelo WhatsApp</a>.</div>';
+        return;
+      }
+      _allProds = r.data;
+      proceed();
+    });
+};
+
+function buildPackageStep(scored){
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  ge('s4').classList.add('active');
+  ge('pFill').style.width = '85%';
+  ge('pMeta').textContent = 'Escolha o pacote';
+  ge('pPct').textContent = '85%';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  _selectedPackageIdx = null;
+  ge('btn4').classList.remove('ok');
+
+  var html = scored.map(function(item, idx){
+    var p = item.p;
+    var preco = parseFloat(String(p.preco||'0').replace(/\./g,'').replace(',','.')) || 0;
+    var ii = pIncluso(p.incluso).slice(0,3);
+    var infoHtml = '';
+    if(ii.length){
+      infoHtml = '<div class="opt-info">'
+        +'<div class="opt-info-title"><i class="fas fa-circle-check"></i> O que está incluso</div>'
+        +'<ul class="opt-info-list">'
+        + ii.map(function(it){ return '<li><i class="fas fa-circle-check"></i><span>'+esc(it)+'</span></li>'; }).join('')
+        +'</ul></div>';
+    }
+    return '<div class="option" onclick="pickPackage(this,'+idx+')">'
+      +'<div class="opt-main">'
+      +'<div class="opt-icon"><i class="fas fa-camera-retro"></i></div>'
+      +'<div class="opt-label-wrap">'
+      +'<div class="opt-label">'+esc(p.nome)+'</div>'
+      +'<div class="opt-sub">'+fMoney(preco)+(p.categoria?' · '+esc(p.categoria):'')+'</div>'
+      +'</div>'
+      +'<div class="opt-check"><i class="fas fa-check"></i></div>'
+      +'</div>'
+      + infoHtml
+      +'</div>';
+  }).join('');
+
+  ge('opts4').innerHTML = html;
+}
+
+window.pickPackage = function(el, idx){
+  el.closest('.options').querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  _selectedPackageIdx = idx;
+  ge('btn4').classList.add('ok');
+};
+
+window.confirmPackageSelection = function(){
+  if(_selectedPackageIdx === null) return;
+  /* Reordena: pacote selecionado primeiro */
+  var chosen = _scoredPackages[_selectedPackageIdx];
+  var rest = _scoredPackages.filter(function(_,i){ return i !== _selectedPackageIdx; });
+  var reordered = [chosen].concat(rest);
+
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  ge('sResult').classList.add('active');
+  ge('pFill').style.width = '100%';
+  ge('pMeta').textContent = 'Resultado';
+  ge('pPct').textContent = '100%';
+  ge('resultLoading').style.display = 'block';
+  ge('resultContent').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderResult(reordered);
+};
+
+window.goStepBack = function(){
+  /* Volta ao step 3 */
+  goStep(3);
+};
+
+/* ═══ FILTRO TRADICIONAIS POR DURAÇÃO ═══
+   Pacotes ordenados por preço (crescente) = duração crescente (2h < 3h < 4h).
+   - duracao 2h → só o 1º pacote (mais barato = menor cobertura)
+   - duracao 3h → 1º e 2º pacotes
+   - duracao 4h → 2º e 3º pacotes
+*/
+function filterTradicionalByDuracao(scored, duracao){
+  if(!duracao || duracao === 'auto') return scored;
+  /* ordena por preço crescente */
+  var sorted = scored.slice().sort(function(a,b){
+    var pa = parseFloat(String(a.p.preco||'0').replace(/\./g,'').replace(',','.')) || 0;
+    var pb = parseFloat(String(b.p.preco||'0').replace(/\./g,'').replace(',','.')) || 0;
+    return pa - pb;
+  });
+  if(duracao === '2h') return sorted.slice(0,1);
+  if(duracao === '3h') return sorted.slice(0,2);
+  if(duracao === '4h'){
+    /* pega do 2º em diante (exclui o mais barato), limitado a 2 */
+    return sorted.length >= 2 ? sorted.slice(1,3) : sorted.slice(0,2);
+  }
+  return sorted;
+}
+
+/* Monta a chave de busca a partir das respostas */
+function resolveKey(){
+  if(A.tipo === 'ensaio'){
+    if(A.subtipo === 'infantil'){
+      return 'ensaio_infantil_'+(A.duracao||'sembolo');
+    }
+    return 'ensaio_'+(A.subtipo||'adulto');
+  }
+  if(A.tipo === 'evento'){
+    return 'evento_' + (A.subtipo || 'tradicional');
+  }
+  return 'ensaio_adulto';
+}
+
+function renderResult(scored){
+  var key = resolveKey();
+  var cats = CAT_MAP[key] || [];
+
+  if(!scored){
+    scored = _allProds.map(function(p){
+      return {p:p, score:scoreProduct(p, key)};
+    }).filter(function(x){ return x.score > 0; });
+    scored.sort(function(a,b){ return b.score - a.score; });
+
+    if(!scored.length){
+      if(key === 'ensaio_infantil_combolo' || key === 'ensaio_infantil_sembolo'){
+        scored = _allProds.filter(function(p){
+          return norm(p.categoria) === 'ensaio infantil' && scoreProduct(p, key) > 0;
+        }).map(function(p){ return {p:p,score:20}; });
+      } else {
+        var fallbackCats = A.tipo === 'evento'
+          ? ['Tradicionais','Debutante','Festare & Full House']
+          : ['Ensaio Adulto','Ensaio Infantil','Ensaio Família','Ensaio Teen','Ensaio Profissional','Ensaio Kids'];
+        scored = _allProds.filter(function(p){
+          var pCat = norm(p.categoria);
+          return fallbackCats.some(function(c){ return norm(c)===pCat; });
+        }).map(function(p){ return {p:p,score:30}; });
+      }
+    }
+  }
+
+  if(!scored.length){
+    ge('resultLoading').innerHTML='<div class="loading-text">Nenhum pacote encontrado. <a href="https://wa.me/5522992497662" style="color:var(--gold)">Fale pelo WhatsApp</a>.</div>';
+    return;
+  }
+
+  _matched = scored[0].p;
+  _others  = scored.slice(1,4).map(function(x){ return x.p; });
+
+  var p = _matched;
+  var imgs = bImgs(p);
+  var preco = parseFloat(String(p.preco||'0').replace(/\./g,'').replace(',','.')) || 0;
+
+  /* hero */
+  if(imgs.length){
+    ge('rHeroTrack').innerHTML = imgs.map(function(u){
+      return '<img src="'+esc(u)+'" style="width:100%;height:100%;object-fit:cover;object-position:top center;flex-shrink:0;" loading="lazy" onerror="this.style.display=\'none\'">';
+    }).join('');
+    var ph = ge('rHeroPlaceholder'); if(ph) ph.remove();
+    _rhi_imgs = imgs; _rhi = 0;
+    if(imgs.length>1){
+      ge('rHeroDots').innerHTML = imgs.map(function(_,i){
+        return '<div class="result-hero-dot'+(i===0?' active':'')+'" onclick="rHeroGo('+i+')"></div>';
+      }).join('');
+    }
+  } else { _rhi_imgs = []; }
+
+  ge('rCat').textContent = p.categoria||'';
+  ge('rName').textContent = p.nome||'—';
+  ge('rPrice').textContent = fMoney(preco);
+  ge('rBase').textContent = p.vendedor_nome ? 'por '+p.vendedor_nome : '';
+
+  var whys = {
+    ensaio:'Baseado no seu perfil, este é o ensaio mais alinhado ao que você descreveu.',
+    evento:'Este pacote se encaixa perfeitamente na duração e no tipo do seu evento.'
+  };
+  ge('rWhy').textContent = whys[A.tipo]||'Pacote mais compatível com seu perfil.';
+
+  var ii = pIncluso(p.incluso);
+  ge('rIncluso').innerHTML = ii.length
+    ? ii.map(function(i){ return '<li><i class="fas fa-circle-check"></i>'+esc(i)+'</li>'; }).join('')
+    : '<li><i class="fas fa-circle-check"></i>Consulte os detalhes completos</li>';
+
+  var ed = pExtras(p.extras);
+  if(ed.length){
+    ge('rExtrasList').innerHTML = ed.map(function(ex,i){
+      return '<div class="r-extra-item" id="rex-'+i+'" onclick="toggleExtra('+i+','+ex.price+')">'
+        +'<div class="r-extra-check"><i class="fas fa-check"></i></div>'
+        +'<div class="r-extra-name">'+esc(ex.name)+'</div>'
+        +'<div class="r-extra-price">+'+fMoney(ex.price)+'</div>'
+        +'</div>';
+    }).join('');
+    ge('rExtrasSection').style.display = 'block';
+  } else { ge('rExtrasSection').style.display = 'none'; }
+
+  ge('rTotal').textContent = fMoney(preco);
+
+  var fd = FAQ[A.tipo] && FAQ[A.tipo].result;
+  ge('rFaqItems').innerHTML = fd
+    ? fd.map(function(i){ return '<div class="r-faq-item"><div class="r-faq-q">'+esc(i.q)+'</div><div class="r-faq-a">'+i.a+'</div></div>'; }).join('')
+    : '';
+
+  var waMsg = encodeURIComponent('Olá! Fiz o quiz no site e o pacote recomendado foi:\n\n'
+    +'📸 *Pacote:* '+p.nome+'\n🏷️ *Categoria:* '+(p.categoria||'')+'\n💰 *Valor:* '+fMoney(preco)+'\n\nGostaria de reservar minha data!');
+  ge('btnWA').href = 'https://wa.me/'+(p.whatsapp||'5522992497662')+'?text='+waMsg;
+
+  if(_others.length){
+    ge('rOutrosTitulo').style.display='block';
+    ge('rOutros').innerHTML = _others.map(function(op){
+      var oP = parseFloat(String(op.preco||'0').replace(/\./g,'').replace(',','.')) || 0;
+      return '<div class="outro-card" onclick="abrirOutro(\''+esc(op.id)+'\')">'
+        +'<div class="outro-icon"><i class="fas fa-camera"></i></div>'
+        +'<div class="outro-info"><div class="outro-name">'+esc(op.nome)+'</div>'
+        +'<div class="outro-price">'+fMoney(oP)+' · '+(op.categoria||'')+'</div></div>'
+        +'<div class="outro-arr"><i class="fas fa-chevron-right"></i></div></div>';
+    }).join('');
+  } else { ge('rOutrosTitulo').style.display='none'; }
+
+  ge('resultLoading').style.display='none';
+  ge('resultContent').style.display='block';
+
+  /* Abre modal automaticamente após 700ms */
+  setTimeout(function(){ if(_matched) openProductModal(_matched); }, 700);
+}
+
+/* ═══ EXTRAS TOGGLE ═══ */
+window.toggleExtra = function(idx, price){
+  var el = ge('rex-'+idx); if(!el) return;
+  if(_selectedExtras[idx]){ delete _selectedExtras[idx]; el.classList.remove('checked'); }
+  else { _selectedExtras[idx] = price; el.classList.add('checked'); }
+  var base = _matched ? (parseFloat(String(_matched.preco||'0').replace(/\./g,'').replace(',','.')) || 0) : 0;
+  ge('rTotal').textContent = fMoney(base + Object.values(_selectedExtras).reduce(function(a,b){ return a+b; }, 0));
+};
+
+/* ═══ HERO CAROUSEL ═══ */
+window.rHeroGo = function(idx){
+  if(!_rhi_imgs.length) return;
+  _rhi = Math.max(0,Math.min(_rhi_imgs.length-1,idx));
+  ge('rHeroTrack').style.transform = 'translateX(-'+(_rhi*100)+'%)';
+  document.querySelectorAll('#rHeroDots .result-hero-dot').forEach(function(d,i){ d.classList.toggle('active',i===_rhi); });
+};
+
+/* ═══ MODAL ═══ */
+window.abrirModalProduto = function(){ if(_matched) openProductModal(_matched); };
+window.abrirOutro = function(id){
+  var p = _allProds.find(function(x){ return x.id==id; });
+  if(p) openProductModal(p);
+};
+
+function openProductModal(p){
+  _cp=p;
+  var ps=String(p.preco||'0').trim();
+  if(ps.includes(','))ps=ps.replace(/\./g,'').replace(',','.');
+  _cbp=parseFloat(ps)||0;
+  _mci=0; _mi=bImgs(p);
+  buildModalCarousel(_mi);
+  ge('modalCat').textContent=p.categoria||'';
+  ge('modalTitle').textContent=p.nome||'';
+  ge('modalDesc').innerHTML=p.descricao||'';
+  var ii=pIncluso(p.incluso), is=ge('modalInclusoSection'), il=ge('modalInclusoList');
+  if(ii.length){
+    il.innerHTML=ii.map(function(i){ return '<li><i class="fas fa-circle-check"></i>'+esc(i)+'</li>'; }).join('');
+    is.style.display='block';
+  } else { is.style.display='none'; }
+  var ed=pExtras(p.extras), es=ge('modalExtrasSection'), elist=ge('modalExtrasList');
+  if(ed.length){
+    elist.innerHTML=ed.map(function(ex,i){
+      return '<label class="extra-item" id="mex-'+i+'">'
+        +'<input type="checkbox" data-price="'+ex.price+'" onchange="modalRecalc()">'
+        +'<div class="extra-check"><i class="fas fa-check"></i></div>'
+        +'<span class="extra-name">'+esc(ex.name)+'</span>'
+        +'<span class="extra-price">+'+fMoney(ex.price)+'</span>'
+        +'</label>';
+    }).join('');
+    elist.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        this.closest('.extra-item').classList.toggle('checked',this.checked);
+        var chk=this.closest('.extra-item').querySelector('.extra-check');
+        if(chk) chk.style.color=this.checked?'#07070c':'transparent';
+      });
+    });
+    es.style.display='block';
+  } else { es.style.display='none'; }
+  ge('pixStatus').classList.remove('show');
+  ge('modalBtnWA').style.display='flex';
+  if(p.pix_key){ ge('modalBtnPix').style.display='flex'; ge('fixedBtnPix').style.display='flex'; }
+  else { ge('modalBtnPix').style.display='none'; ge('fixedBtnPix').style.display='none'; }
+  modalRecalc();
+  ge('prodModal').classList.add('active');
+  document.body.style.overflow='hidden';
+  ge('fixedBar').classList.add('visible');
+}
+
+function buildModalCarousel(imgs){
+  var t=ge('modalCarouselTrack'), d=ge('modalDots'), pv=ge('modalPrev'), nx=ge('modalNext');
+  if(!imgs.length){
+    t.innerHTML='<div class="modal-img-placeholder"><i class="fas fa-camera-retro"></i></div>';
+    d.innerHTML=''; pv.style.display=nx.style.display='none'; return;
+  }
+  t.innerHTML=imgs.map(function(u){ return '<img src="'+esc(u)+'" loading="lazy" onerror="this.style.display=\'none\'">'; }).join('');
+  d.innerHTML=imgs.map(function(_,i){ return '<div class="dot'+(i===0?' active':'')+'" onclick="modalGoTo('+i+')"></div>'; }).join('');
+  pv.style.display=nx.style.display=imgs.length>1?'flex':'none';
+  t.style.transform='translateX(0)';
+}
+
+window.closeModal = function(){
+  ge('prodModal').classList.remove('active');
+  document.body.style.overflow='';
+  ge('fixedBar').classList.remove('visible');
+  _cp=null;
+};
+window.modalClickOut = function(e){ if(e.target===ge('prodModal')) closeModal(); };
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+window.modalGoTo = function(idx){
+  if(!_mi.length) return;
+  _mci=Math.max(0,Math.min(_mi.length-1,idx));
+  ge('modalCarouselTrack').style.transform='translateX(-'+(_mci*100)+'%)';
+  document.querySelectorAll('#modalDots .dot').forEach(function(d,i){ d.classList.toggle('active',i===_mci); });
+};
+window.modalMove = function(dir){ modalGoTo(_mci+dir); };
+
+/* touch swipe no modal */
+var _mtx=null;
+ge('prodModalBox').addEventListener('touchstart',function(e){
+  if(e.target.closest('.modal-carousel')) _mtx=e.touches[0].clientX;
+},{passive:true});
+ge('prodModalBox').addEventListener('touchend',function(e){
+  if(_mtx===null) return;
+  if(Math.abs(e.changedTouches[0].clientX-_mtx)>40) modalMove(e.changedTouches[0].clientX-_mtx<0?1:-1);
+  _mtx=null;
+},{passive:true});
+
+/* touch drag para fechar modal pelo handle */
+var _mty=null;
+ge('prodModalBox').addEventListener('touchstart',function(e){
+  _mty=e.touches[0].clientY;
+},{passive:true});
+ge('prodModalBox').addEventListener('touchend',function(e){
+  if(_mty===null) return;
+  var dy=e.changedTouches[0].clientY-_mty;
+  if(dy>80) closeModal();
+  _mty=null;
+},{passive:true});
+
+window.modalRecalc = function(){
+  var total=_cbp;
+  document.querySelectorAll('#modalExtrasList input[type=checkbox]').forEach(function(cb){
+    if(cb.checked) total+=parseFloat(cb.dataset.price||0);
+  });
+  var fmt=fMoney(total);
+  ge('modalTotal').textContent=fmt;
+  ge('fixedTotal').textContent=fmt;
+  ge('modalTotalVal').textContent=fmt;
+  ge('modalPriceBase').textContent=fMoney(_cbp)+' · preço base';
+};
+
+/* ═══ WA / PIX ═══ */
+window.openWA = function(){
+  if(!_cp) return;
+  var total=ge('modalTotal').textContent, extras=[];
+  document.querySelectorAll('#modalExtrasList input[type=checkbox]').forEach(function(cb){
+    if(cb.checked){
+      var item=cb.closest('.extra-item');
+      var nome=item.querySelector('.extra-name')?item.querySelector('.extra-name').textContent.trim():'';
+      var preco=item.querySelector('.extra-price')?item.querySelector('.extra-price').textContent.trim():'';
+      if(nome) extras.push(nome+(preco?' ('+preco+')':''));
+    }
+  });
+  var linhas=['Olá! Tenho interesse no seguinte pacote:','','📸 *Pacote:* '+_cp.nome,'🏷️ *Categoria:* '+(_cp.categoria||'')];
+  if(extras.length){ linhas.push(''); linhas.push('➕ *Adicionais:*'); extras.forEach(function(e){ linhas.push('   • '+e); }); }
+  linhas.push('','💰 *Total: '+total+'*','','Podemos conversar e confirmar a data?');
+  window.open('https://wa.me/'+(_cp.whatsapp||'5522992497662')+'?text='+encodeURIComponent(linhas.join('\n')),'_blank');
+};
+window.copyPix = function(){
+  if(!_cp||!_cp.pix_key) return;
+  var show=function(){ var e=ge('pixStatus'); e.classList.add('show'); setTimeout(function(){ e.classList.remove('show'); },3000); };
+  navigator.clipboard.writeText(_cp.pix_key).then(show).catch(function(){
+    var ta=document.createElement('textarea'); ta.value=_cp.pix_key;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); show();
+  });
+};
+
+/* ═══ RESTART ═══ */
+window.restart = function(){
+  A={}; _matched=null; _others=[]; _selectedExtras={}; _scoredPackages=[]; _selectedPackageIdx=null;
+  document.querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+  document.querySelectorAll('.btn-next').forEach(function(b){ b.classList.remove('ok'); });
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  ge('s1').classList.add('active');
+  ge('pFill').style.width='0%';
+  ge('pMeta').textContent='Passo 1 de 3';
+  ge('pPct').textContent='0%';
+  buildStep2(); buildStep3();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+/* ═══ PREFETCH ═══ */
+function prefetchProducts(){
+  _db.from('marketplace_produtos')
+    .select('id,nome,descricao,preco,imagem_url,imagem2_url,imagem3_url,imagem4_url,imagem5_url,categoria,vendedor_nome,status,whatsapp,pix_key,incluso,extras')
+    .eq('status','ativo')
+    .order('data_criacao',{ascending:false})
+    .then(function(r){
+      if(r.error||!r.data||!r.data.length) return;
+      _allProds=r.data;
+    });
+}
+
+/* ═══ INIT ═══ */
+buildStep2();
+buildStep3();
+prefetchProducts();
+
+})();
+</script>
+</body>
+</html>
