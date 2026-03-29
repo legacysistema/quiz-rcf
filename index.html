@@ -817,7 +817,7 @@ body::after{
             <div class="opt-info">
               <div class="opt-info-title"><i class="fas fa-circle-info"></i> O que você precisa saber</div>
               <ul class="opt-info-list">
-                <li><i class="fas fa-circle-check"></i><span>Sessão em estúdio <strong>atendendo 1 ano até casuais adultos</strong></span></li>
+                <li><i class="fas fa-circle-check"></i><span>Sessão em estúdio com <strong>atendendo 1 ano até casuais adultos</strong></span></li>
                 <li><i class="fas fa-circle-check"></i><span>Seleção online das fotos favoritas</span></li>
                 <li><i class="fas fa-circle-check"></i><span>Entrega em <strong>5 dias úteis</strong> via Google Drive</span></li>
                 <li><i class="fas fa-circle-check"></i><span>Reserva com <strong>Pix ou cartão</strong></span></li>
@@ -1310,6 +1310,8 @@ var QUIZ_FILTRO = {
   ensaio_teen:              { categoria: 'Ensaio Teen',         subcategoria: 'teen_11_16'   },
   ensaio_adulto:            { categoria: 'Ensaio Adulto',       subcategoria: 'adulto'       },
   ensaio_familia:           { categoria: 'Ensaio Família',      subcategoria: 'familiar'     },
+  ensaio_familia_familiar:  { categoria: 'Ensaio Família',      subcategoria: 'familiar'     },
+  ensaio_familia_gestante:  { categoria: 'Ensaio Família',      subcategoria: 'gestante'     },
   ensaio_profissional:      { categoria: 'Ensaio Profissional', subcategoria: null           },
   evento_tradicional:       { categoria: 'Tradicionais',        subcategoria: null           },
   evento_tradicional_2h:    { categoria: 'Tradicionais',        subcategoria: null           },
@@ -1471,6 +1473,35 @@ var S2 = {
    Para os demais ensaios: vai direto ao resultado (s3 é skipped)
 ═══════════════════════════════════════ */
 var S3 = {
+  ensaio_familia:{
+    eyebrow:'Tipo de ensaio família',
+    q:'Como será o ensaio de família?',
+    opts:[
+      {
+        i:'fas fa-people-roof',
+        l:'Ensaio Familiar',
+        sub:'Toda a família · até 4 pessoas · fundo clean',
+        v:'familiar',
+        info:[
+          'Sessão de <strong>1 hora</strong> com até <strong>4 pessoas</strong>',
+          'Até <strong>2 trocas de look</strong> — fundo clean',
+          '20 fotos editadas · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-heart',
+        l:'Ensaio Gestante',
+        sub:'Mamãe gestante · casal ou solo',
+        v:'gestante',
+        info:[
+          'Sessão especial para <strong>gestantes</strong>',
+          'Sozinha ou com o casal',
+          'Fundo clean profissional',
+          'Seleção online · entrega em <strong>5 dias</strong>'
+        ]
+      }
+    ]
+  },
   ensaio_infantil:{
     eyebrow:'Tipo de ensaio',
     q:'Qual tipo de ensaio infantil você imagina?',
@@ -1567,6 +1598,7 @@ function buildStep3(){
   var key = '';
   if(A.tipo === 'ensaio'){
     if(A.subtipo === 'infantil') key = 'ensaio_infantil';
+    else if(A.subtipo === 'familia') key = 'ensaio_familia';
     /* demais subtipos de ensaio vão direto ao resultado no step3 — mostrar opções genéricas */
     else key = null;
   } else if(A.tipo === 'evento'){
@@ -1574,7 +1606,7 @@ function buildStep3(){
   }
 
   if(!key){
-    /* Para teen, adulto, familia, profissional: step3 mostra opção única e avança */
+    /* Para teen, adulto, profissional: step3 mostra opção única e avança */
     ge('s3-eyebrow').textContent = 'Confirmação';
     ge('q3').textContent = 'Pronto! Vamos buscar seu pacote.';
     ge('opts3').innerHTML = '<div class="option selected" id="opt3auto">'
@@ -1801,6 +1833,11 @@ function resolveKey(){
   if(A.tipo === 'ensaio'){
     if(A.subtipo === 'infantil'){
       return 'ensaio_infantil_'+(A.duracao||'sembolo');
+    }
+    if(A.subtipo === 'familia'){
+      /* duracao aqui carrega 'familiar' ou 'gestante' (resposta do step3) */
+      var subFam = A.duracao && A.duracao !== 'auto' ? A.duracao : 'familiar';
+      return 'ensaio_familia_'+subFam;
     }
     return 'ensaio_'+(A.subtipo||'adulto');
   }
