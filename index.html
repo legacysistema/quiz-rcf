@@ -3909,3 +3909,143 @@ prefetchProducts();
 </script>
 </body>
 </html>
+
+<!-- ══ MONITORAMENTO — espelhado do Portal do Cliente ══ -->
+<script>
+(function() {
+  var SUPA_URL = atob('aHR0cHM6Ly9sZWRwcWN5bnZxYmRiY2NlYmhiby5zdXBhYmFzZS5jbw==');
+  var SUPA_KEY = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW14bFpIQnhZM2x1ZG5GaVpHSmpZMlZpYUdKdklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpBek9EYzNNamdzSW1WNGNDSTZNakE0TlRrMk16Y3lPSDAuczhHT3pwNHdvdWpHdURjNHZLOVFYSWYzY1dMTUVOVW5KZkU0bHRfWWhMZw==');
+
+  /* ── Sessão única por aba ── */
+  var sessaoId = sessionStorage.getItem('_qlid');
+  if (!sessaoId) {
+    sessaoId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    sessionStorage.setItem('_qlid', sessaoId);
+  }
+
+  /* ── Envia evento para Supabase (tabela eventos_lead) ── */
+  function _ev(evento, detalhe) {
+    try {
+      fetch(SUPA_URL + '/rest/v1/eventos_lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPA_KEY,
+          'Authorization': 'Bearer ' + SUPA_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          sessao_id: sessaoId,
+          evento: 'quiz_' + evento,
+          detalhe: detalhe || null
+        })
+      }).catch(function(){});
+    } catch(e) {}
+  }
+
+  /* ── Contador de acessos diários (mesma tabela do portal) ── */
+  function _pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function _hoje() {
+    var d = new Date();
+    return d.getFullYear() + '-' + _pad(d.getMonth()+1) + '-' + _pad(d.getDate());
+  }
+  async function _registrarAcesso(db) {
+    var hoje = _hoje();
+    try {
+      var r = await db.from('acessos_diarios').select('id, total').eq('data', hoje).maybeSingle();
+      if (r.data) {
+        await db.from('acessos_diarios')
+          .update({ total: r.data.total + 1, atualizado_em: new Date().toISOString() })
+          .eq('id', r.data.id);
+      } else {
+        await db.from('acessos_diarios')
+          .insert({ data: hoje, total: 1, atualizado_em: new Date().toISOString() });
+      }
+    } catch(e) {}
+  }
+
+  /* ── 1. Sessão iniciada ── */
+  if (!sessionStorage.getItem('_qlid_init')) {
+    sessionStorage.setItem('_qlid_init', '1');
+    _ev('sessao_inicio');
+    /* registra acesso diário usando o _db já inicializado pelo quiz */
+    var _waitDb = setInterval(function() {
+      if (window._db) { clearInterval(_waitDb); _registrarAcesso(window._db); }
+    }, 300);
+  }
+
+  /* ── 2. Intercepta pick() — rastreia cada resposta do quiz ── */
+  var _origPick = window.pick;
+  window.pick = function(el, key, val, stepId) {
+    _ev('resposta', key + '=' + val);
+    if (_origPick) _origPick(el, key, val, stepId);
+  };
+
+  /* ── 3. Intercepta goStep() — rastreia navegação entre passos ── */
+  var _origGoStep = window.goStep;
+  window.goStep = function(n) {
+    _ev('step', 'passo_' + n);
+    if (_origGoStep) _origGoStep(n);
+  };
+
+  /* ── 4. Intercepta showResult() — rastreia chegada ao resultado ── */
+  var _origShowResult = window.showResult;
+  window.showResult = function() {
+    _ev('resultado_exibido');
+    if (_origShowResult) _origShowResult();
+  };
+
+  /* ── 5. Intercepta confirmPackageSelection() — rastreia confirmação de pacote ── */
+  var _origConfirm = window.confirmPackageSelection;
+  window.confirmPackageSelection = function() {
+    _ev('pacote_confirmado');
+    if (_origConfirm) _origConfirm();
+  };
+
+  /* ── 6. Intercepta openProductModal() — rastreia abertura de modal de pacote ── */
+  var _origOpenModal = window.openProductModal;
+  window.openProductModal = function(p) {
+    if (p && p.nome) _ev('pacote_aberto', (p.nome).slice(0, 80));
+    if (_origOpenModal) _origOpenModal(p);
+  };
+
+  /* ── 7. Intercepta openWA() — rastreia clique no WhatsApp ── */
+  var _origOpenWA = window.openWA;
+  window.openWA = function() {
+    var nome = window._cp && window._cp.nome ? window._cp.nome.slice(0, 80) : 'pacote';
+    _ev('interesse_wa', nome);
+    if (_origOpenWA) _origOpenWA();
+  };
+
+  /* ── 8. Intercepta copyPix() — rastreia cópia da chave Pix ── */
+  var _origCopyPix = window.copyPix;
+  window.copyPix = function() {
+    var nome = window._cp && window._cp.nome ? window._cp.nome.slice(0, 80) : 'pacote';
+    _ev('pix_copiado', nome);
+    if (_origCopyPix) _origCopyPix();
+  };
+
+  /* ── 9. Intercepta bookSetStep() — rastreia passos do agendamento ── */
+  var _labels = { 1: 'escolha_data', 2: 'dados_pessoais', 3: 'pagamento_pix' };
+  var _origBookSetStep = window.bookSetStep;
+  window.bookSetStep = function(n) {
+    _ev('agendamento_step', _labels[n] || 'step_' + n);
+    if (_origBookSetStep) _origBookSetStep(n);
+  };
+
+  /* ── Aguarda funções do quiz estarem prontas antes de interceptar ── */
+  var _MAX = 8000, _INT = 150, _el = 0;
+  function _hookAll() {
+    var ready = window.pick && window.goStep && window.showResult
+                && window.openWA && window.copyPix && window.bookSetStep;
+    if (ready) {
+      /* já interceptado acima — nada mais a fazer */
+      return;
+    }
+    _el += _INT;
+    if (_el < _MAX) setTimeout(_hookAll, _INT);
+  }
+  setTimeout(_hookAll, 500);
+
+})();
+</script>
