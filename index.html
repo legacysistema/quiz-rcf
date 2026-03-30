@@ -579,6 +579,116 @@ body::after{
 }
 .book-scarcity-bar i{font-size:11px;}
 
+/* ── MODAL CONSULTA DE DATAS ── */
+.cdata-overlay{
+  position:fixed;inset:0;z-index:1100;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+@media(min-width:600px){.cdata-overlay{align-items:center;padding:16px;}}
+.cdata-overlay.active{opacity:1;pointer-events:all;}
+.cdata-box{
+  background:rgba(9,9,16,0.98);
+  border:1px solid rgba(212,168,67,0.15);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:520px;
+  max-height:88vh;overflow-y:auto;
+  transform:translateY(40px);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1);
+  box-shadow:var(--glow-gold),0 -24px 80px rgba(0,0,0,.7);
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent;
+  padding-bottom:var(--safe-bottom);
+}
+@media(min-width:600px){
+  .cdata-box{border-radius:24px;transform:scale(.96) translateY(20px);}
+  .cdata-overlay.active .cdata-box{transform:scale(1) translateY(0);}
+}
+.cdata-overlay.active .cdata-box{transform:translateY(0);}
+.cdata-handle{
+  width:36px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.12);margin:10px auto 0;cursor:pointer;
+}
+.cdata-close{
+  position:absolute;top:14px;right:14px;
+  width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.07);color:var(--text);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:background .2s;z-index:5;
+}
+.cdata-inner{padding:18px 20px 26px;position:relative;}
+.cdata-eyebrow{
+  font-family:var(--font-ui);font-size:10px;font-weight:600;
+  color:var(--gold);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:5px;display:flex;align-items:center;gap:6px;
+}
+.cdata-eyebrow::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.4;}
+.cdata-title{font-family:var(--font-serif);font-size:19px;color:#fff;margin-bottom:4px;line-height:1.3;}
+.cdata-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+/* Painel de horários read-only */
+.cdata-times-panel{
+  padding:13px 15px 15px;
+  background:rgba(212,168,67,.05);
+  border:1px solid rgba(212,168,67,.18);
+  border-radius:13px;margin-bottom:14px;
+  display:none;animation:fadeUp .2s ease;
+}
+.cdata-times-panel.show{display:block;}
+.cdata-times-label{
+  font-size:11px;font-weight:700;color:var(--gold);
+  font-family:var(--font-ui);text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:11px;
+}
+.cdata-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.cdata-chip{
+  padding:8px 16px;border-radius:9px;
+  border:1px solid rgba(212,168,67,.22);
+  background:rgba(255,255,255,.03);
+  font-size:14px;font-weight:700;color:var(--text);font-family:var(--font-ui);
+  display:flex;align-items:center;gap:5px;
+}
+.cdata-chip i{font-size:10px;color:var(--gold);}
+.cdata-loc{font-size:11px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.cdata-loc i{color:var(--gold);font-size:10px;}
+.cdata-obs{padding:10px 13px;background:rgba(212,168,67,0.05);border:1px solid rgba(212,168,67,0.13);border-radius:10px;font-size:12px;color:var(--muted);line-height:1.6;white-space:pre-wrap;word-break:break-word;margin-bottom:10px;}
+.cdata-obs-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);font-weight:600;font-family:var(--font-ui);margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+/* CTAs dentro do painel */
+.cdata-cta-row{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.cdata-btn-reservar{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,rgba(212,168,67,.18),rgba(212,168,67,.08));
+  border:1px solid rgba(212,168,67,.42);border-radius:13px;
+  color:var(--gold);font-size:14px;font-weight:700;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;
+  box-shadow:0 4px 22px rgba(212,168,67,.10);
+}
+.cdata-btn-reservar:active{background:linear-gradient(135deg,rgba(212,168,67,.28),rgba(212,168,67,.14));}
+.cdata-btn-wa{
+  width:100%;padding:12px;
+  background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.22);
+  border-radius:12px;color:var(--wa);font-size:13px;font-weight:600;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  text-decoration:none;transition:all .2s;
+}
+.cdata-btn-wa:active{background:rgba(37,211,102,.14);}
+/* Botão gatilho na tela de resultado */
+.btn-consultar-datas{
+  width:100%;padding:13px;min-height:48px;
+  background:rgba(212,168,67,.05);
+  border:1px solid rgba(212,168,67,.2);
+  border-radius:13px;color:var(--gold);font-size:13px;font-weight:600;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;margin-bottom:9px;
+}
+.btn-consultar-datas:active{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.4);}
+/* Loader consulta */
+.cdata-loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:32px 0;color:var(--muted);font-size:13px;font-family:var(--font-ui);}
+.cdata-loader-spin{width:22px;height:22px;border-radius:50%;border:2px solid rgba(212,168,67,.15);border-top-color:var(--gold);animation:spin .8s linear infinite;flex-shrink:0;}
+
 /* Form */
 .book-field{margin-bottom:14px;}
 .book-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;font-family:var(--font-ui);margin-bottom:6px;display:block;}
@@ -932,13 +1042,6 @@ body::after{
             <div id="rFaqItems"></div>
           </div>
           <div class="r-divider"></div>
-          <button class="btn-modal-open" id="btnAbrirModal" onclick="abrirModalProduto()">
-            <i class="fas fa-magnifying-glass-plus"></i> Ver pacote completo e garantir minha data
-          </button>
-          <a class="btn-wa-result" id="btnWA" href="https://wa.me/5522992497662" target="_blank" rel="noopener">
-            <i class="fab fa-whatsapp"></i> Tirar dúvidas pelo WhatsApp
-          </a>
-          <div class="r-divider"></div>
           <div class="outros-title" id="rOutrosTitulo" style="display:none;">Outros pacotes compatíveis</div>
           <div id="rOutros"></div>
           <button class="btn-restart" onclick="restart()">
@@ -951,7 +1054,7 @@ body::after{
   </div>
 </div>
 
-<div class="footer">© 2026 Rodrigo Costa Fotografia · instagram @rodrigcostafotografia</div>
+<div class="footer">© 2026 Rodrigo Costa Fotografia · @rodrigocostafotografia</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="prodModal" onclick="modalClickOut(event)">
@@ -993,8 +1096,8 @@ body::after{
       <div class="cta-buttons">
         <!-- Melhoria 2: Pix como CTA principal -->
         <button class="btn-pix-modal btn-pix-primary" id="modalBtnPix" onclick="openBookModal()" style="display:none;">
-          <i class="fas fa-bolt-lightning"></i> Ver vagas & Garantir minha data
-          <span class="btn-pix-hint">Reserva via Pix</span>
+          <i class="fas fa-bolt-lightning"></i> Ver Vagas & Garantir Data
+          <span class="btn-pix-hint">Reserva Pix confirmada em minutos</span>
         </button>
         <button class="btn-wa-modal btn-wa-secondary" id="modalBtnWA" onclick="openWA()"><i class="fab fa-whatsapp"></i> Prefiro combinar pelo WhatsApp</button>
         <div class="pix-status" id="pixStatus"><i class="fas fa-circle-check"></i> Chave Pix copiada!</div>
@@ -1102,6 +1205,42 @@ Quer uma data futura? É só chamar no WhatsApp
         <a class="book-btn-wa" id="bookBtnWA" href="#" target="_blank" rel="noopener">
           <i class="fab fa-whatsapp"></i> Enviar comprovante e confirmar reserva →
         </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONSULTA DE DATAS -->
+<div class="cdata-overlay" id="cdataModal" onclick="cdataClickOut(event)">
+  <div class="cdata-box" id="cdataBox">
+    <div class="cdata-handle" onclick="fecharConsultaDatas()"></div>
+    <button class="cdata-close" onclick="fecharConsultaDatas()"><i class="fas fa-xmark"></i></button>
+    <div class="cdata-inner">
+      <div class="cdata-eyebrow"><i class="fas fa-calendar-days"></i> Agenda</div>
+      <div class="cdata-title">Datas disponíveis</div>
+      <div class="cdata-sub" id="cdataSub">Clique em um dia para ver os horários disponíveis.</div>
+
+      <!-- Calendário read-only -->
+      <div id="cdataDatesGrid"></div>
+      <div id="cdataLoader" class="cdata-loader" style="display:none;">
+        <div class="cdata-loader-spin"></div> Carregando agenda…
+      </div>
+
+      <!-- Painel de horários -->
+      <div class="cdata-times-panel" id="cdataTimesPanel">
+        <div class="cdata-times-label" id="cdataTimesLabel"></div>
+        <div class="cdata-chips" id="cdataChips"></div>
+        <div class="cdata-loc" id="cdataLoc" style="display:none;"></div>
+        <div class="cdata-obs" id="cdataObs" style="display:none;"></div>
+        <div class="cdata-cta-row">
+          <button class="cdata-btn-reservar" onclick="cdataReservarData()">
+            <i class="fas fa-bolt-lightning"></i> Reservar esta data
+          </button>
+          <a class="cdata-btn-wa" id="cdataBtnWA" href="#" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Tenho interesse — falar no WhatsApp
+          </a>
+        </div>
       </div>
 
     </div>
@@ -1310,12 +1449,14 @@ var QUIZ_FILTRO = {
   ensaio_teen:              { categoria: 'Ensaio Teen',         subcategoria: 'teen_11_16'   },
   ensaio_adulto:            { categoria: 'Ensaio Adulto',       subcategoria: 'adulto'       },
   ensaio_familia:           { categoria: 'Ensaio Família',      subcategoria: 'familiar'     },
+  ensaio_familia_familiar:  { categoria: 'Ensaio Família',      subcategoria: 'familiar'     },
+  ensaio_familia_gestante:  { categoria: 'Ensaio Família',      subcategoria: 'gestante'     },
   ensaio_profissional:      { categoria: 'Ensaio Profissional', subcategoria: null           },
   evento_tradicional:       { categoria: 'Tradicionais',        subcategoria: null           },
-  evento_tradicional_2h:    { categoria: 'Tradicionais',        subcategoria: null           },
-  evento_tradicional_3h:    { categoria: 'Tradicionais',        subcategoria: null           },
-  evento_tradicional_4h:    { categoria: 'Tradicionais',        subcategoria: null           },
-  evento_festare:           { categoria: 'Festare & Full House',subcategoria: null           },
+  evento_tradicional_2h:    { categoria: 'Tradicionais',        subcategoria: '2h'           },
+  evento_tradicional_3h:    { categoria: 'Tradicionais',        subcategoria: '3h'           },
+  evento_tradicional_4h:    { categoria: 'Tradicionais',        subcategoria: '4h'           },
+  evento_festare:           { categoria: 'Festare & Full House',subcategoria: null, fallbackCategoria: 'Tradicionais', fallbackNome: 'festare' },
   evento_debutante:         { categoria: 'Debutante',           subcategoria: null           }
 };
 
@@ -1471,6 +1612,35 @@ var S2 = {
    Para os demais ensaios: vai direto ao resultado (s3 é skipped)
 ═══════════════════════════════════════ */
 var S3 = {
+  ensaio_familia:{
+    eyebrow:'Tipo de ensaio família',
+    q:'Como será o ensaio de família?',
+    opts:[
+      {
+        i:'fas fa-people-roof',
+        l:'Ensaio Familiar',
+        sub:'Toda a família · até 4 pessoas · fundo clean',
+        v:'familiar',
+        info:[
+          'Sessão de <strong>1 hora</strong> com até <strong>4 pessoas</strong>',
+          'Até <strong>2 trocas de look</strong> — fundo clean',
+          '20 fotos editadas · entrega em <strong>5 dias</strong>'
+        ]
+      },
+      {
+        i:'fas fa-heart',
+        l:'Ensaio Gestante',
+        sub:'Mamãe gestante · casal ou solo',
+        v:'gestante',
+        info:[
+          'Sessão especial para <strong>gestantes</strong>',
+          'Sozinha ou com o casal',
+          'Fundo clean profissional',
+          'Seleção online · entrega em <strong>5 dias</strong>'
+        ]
+      }
+    ]
+  },
   ensaio_infantil:{
     eyebrow:'Tipo de ensaio',
     q:'Qual tipo de ensaio infantil você imagina?',
@@ -1567,6 +1737,7 @@ function buildStep3(){
   var key = '';
   if(A.tipo === 'ensaio'){
     if(A.subtipo === 'infantil') key = 'ensaio_infantil';
+    else if(A.subtipo === 'familia') key = 'ensaio_familia';
     /* demais subtipos de ensaio vão direto ao resultado no step3 — mostrar opções genéricas */
     else key = null;
   } else if(A.tipo === 'evento'){
@@ -1574,7 +1745,7 @@ function buildStep3(){
   }
 
   if(!key){
-    /* Para teen, adulto, familia, profissional: step3 mostra opção única e avança */
+    /* Para teen, adulto, profissional: step3 mostra opção única e avança */
     ge('s3-eyebrow').textContent = 'Confirmação';
     ge('q3').textContent = 'Pronto! Vamos buscar seu pacote.';
     ge('opts3').innerHTML = '<div class="option selected" id="opt3auto">'
@@ -1644,7 +1815,7 @@ window.showResult = function(){
     .select('id,nome,descricao,preco,imagem_url,imagem2_url,imagem3_url,imagem4_url,imagem5_url,categoria,subcategoria,vendedor_nome,status,whatsapp,pix_key,incluso,extras')
     .eq('status','ativo')
     .eq('categoria', filtro.categoria)
-    .order('data_criacao',{ascending:false});
+    .order('preco',{ascending:true}); /* ordena por preço para que filterTradicionalByDuracao funcione */
 
   if(filtro.subcategoria){
     query = query.eq('subcategoria', filtro.subcategoria);
@@ -1653,16 +1824,40 @@ window.showResult = function(){
   query.then(function(r){
     var rows = (!r.error && r.data) ? r.data : [];
 
-    /* Fallback: se não encontrou nada, busca só pela categoria (sem subcategoria) */
+    /* Fallback 1: subcategoria não encontrada → busca sem subcategoria na mesma categoria */
     if(!rows.length && filtro.subcategoria){
       _db.from('marketplace_produtos')
         .select('id,nome,descricao,preco,imagem_url,imagem2_url,imagem3_url,imagem4_url,imagem5_url,categoria,subcategoria,vendedor_nome,status,whatsapp,pix_key,incluso,extras')
         .eq('status','ativo')
         .eq('categoria', filtro.categoria)
-        .order('data_criacao',{ascending:false})
+        .order('preco',{ascending:true})
         .then(function(r2){
           var rows2 = (!r2.error && r2.data) ? r2.data : [];
+          /* Para tradicional sem subcategoria no banco: aplica filtro por duração via posição */
           _finalizarResultado(rows2, key);
+        });
+      return;
+    }
+
+    /* Fallback 2: categoria principal vazia → tenta fallbackCategoria (ex: Festare no banco como Tradicionais) */
+    if(!rows.length && filtro.fallbackCategoria){
+      _db.from('marketplace_produtos')
+        .select('id,nome,descricao,preco,imagem_url,imagem2_url,imagem3_url,imagem4_url,imagem5_url,categoria,subcategoria,vendedor_nome,status,whatsapp,pix_key,incluso,extras')
+        .eq('status','ativo')
+        .eq('categoria', filtro.fallbackCategoria)
+        .order('preco',{ascending:true})
+        .then(function(r3){
+          var rows3 = (!r3.error && r3.data) ? r3.data : [];
+          /* Filtra por nome se houver fallbackNome */
+          if(filtro.fallbackNome && rows3.length){
+            var fn = (filtro.fallbackNome||'').toLowerCase();
+            var byNome = rows3.filter(function(p){
+              return (p.nome||'').toLowerCase().includes(fn)
+                  || (p.subcategoria||'').toLowerCase().includes(fn);
+            });
+            if(byNome.length) rows3 = byNome;
+          }
+          _finalizarResultado(rows3, key);
         });
       return;
     }
@@ -1682,9 +1877,20 @@ function _finalizarResultado(rows, key){
   /* Converte para o formato {p, score} esperado pelo restante do código */
   var scored = rows.map(function(p){ return {p:p, score:60}; });
 
-  /* Para tradicionais: filtra/limita por duração escolhida */
+  /* Para tradicionais: remove produtos de Festare/Full House que estejam cadastrados
+     incorretamente na categoria Tradicionais */
   if(A.tipo === 'evento' && A.subtipo === 'tradicional'){
-    scored = filterTradicionalByDuracao(scored, A.duracao);
+    var _excluir = ['festare','full house','fullhouse'];
+    scored = scored.filter(function(x){
+      var nome = (x.p.nome||'').toLowerCase();
+      var subcat = (x.p.subcategoria||'').toLowerCase();
+      return !_excluir.some(function(t){ return nome.includes(t) || subcat.includes(t); });
+    });
+    /* Filtra/limita por duração se não houver subcategoria no banco */
+    var temSubcat = scored.some(function(x){ return x.p.subcategoria && x.p.subcategoria.trim(); });
+    if(!temSubcat){
+      scored = filterTradicionalByDuracao(scored, A.duracao);
+    }
   }
 
   _scoredPackages = scored;
@@ -1802,6 +2008,11 @@ function resolveKey(){
     if(A.subtipo === 'infantil'){
       return 'ensaio_infantil_'+(A.duracao||'sembolo');
     }
+    if(A.subtipo === 'familia'){
+      /* duracao aqui carrega 'familiar' ou 'gestante' (resposta do step3) */
+      var subFam = A.duracao && A.duracao !== 'auto' ? A.duracao : 'familiar';
+      return 'ensaio_familia_'+subFam;
+    }
     return 'ensaio_'+(A.subtipo||'adulto');
   }
   if(A.tipo === 'evento'){
@@ -1880,7 +2091,7 @@ function renderResult(scored){
 
   var waMsg = encodeURIComponent('Olá! Fiz o quiz no site e o pacote recomendado foi:\n\n'
     +'📸 *Pacote:* '+p.nome+'\n🏷️ *Categoria:* '+(p.categoria||'')+'\n💰 *Valor:* '+fMoney(preco)+'\n\nGostaria de reservar minha data!');
-  ge('btnWA').href = 'https://wa.me/'+(p.whatsapp||'5522992497662')+'?text='+waMsg;
+  var btnWAEl = ge('btnWA'); if(btnWAEl) btnWAEl.href = 'https://wa.me/'+(p.whatsapp||'5522992497662')+'?text='+waMsg;
 
   if(_others.length){
     ge('rOutrosTitulo').style.display='block';
@@ -1897,7 +2108,7 @@ function renderResult(scored){
   ge('resultLoading').style.display='none';
   ge('resultContent').style.display='block';
 
-  /* Abre modal automaticamente após 700ms */
+  /* Abre o modal do produto automaticamente após renderizar o resultado */
   setTimeout(function(){ if(_matched) openProductModal(_matched); }, 700);
 }
 
@@ -2252,27 +2463,38 @@ function _disp_filterRegras(regras, categoria) {
   var exact = regras.filter(function (r) { return _disp_normStr(r.tipo) === cn; });
   if (exact.length) return exact;
 
-  // 2. Match parcial (tipo contido na categoria ou vice-versa)
+  // 2. Match parcial — tipo contido na categoria ou vice-versa
+  //    MAS garante que ensaio nunca mistura com evento e vice-versa
+  var cnIsEnsaio = cn.includes('ensaio') || cn.includes('familia') || cn.includes('teen') || cn.includes('adulto') || cn.includes('profissional') || cn.includes('infantil');
+  var cnIsEvento = cn.includes('evento') || cn.includes('aniversario')
+                 || cn.includes('debutante') || cn.includes('tradicional')
+                 || cn.includes('festare');
+
   var partial = regras.filter(function (r) {
     var tn = _disp_normStr(r.tipo);
+    var tnIsEnsaio = tn.includes('ensaio');
+    var tnIsEvento = tn.includes('evento') || tn.includes('aniversario') || tn.includes('tradicional') || tn.includes('festare') || tn.includes('debutante');
+
+    // Bloqueia cruzamento ensaio ↔ evento
+    if (cnIsEnsaio && tnIsEvento) return false;
+    if (cnIsEvento && tnIsEnsaio) return false;
+
     return cn.includes(tn) || tn.includes(cn);
   });
   if (partial.length) return partial;
 
-  // 3. Match por família (ensaio / evento)
-  var isEnsaio = cn.includes('ensaio');
-  var isEvento = cn.includes('evento') || cn.includes('aniversario')
-               || cn.includes('debutante') || cn.includes('tradicional')
-               || cn.includes('festare');
+  // 3. Match por família com separação estrita
   var broad = regras.filter(function (r) {
     var tn = _disp_normStr(r.tipo);
-    if (isEnsaio) return tn.includes('ensaio') || tn === 'ensaio';
-    if (isEvento) return tn.includes('evento') || tn.includes('aniversario') || tn === 'evento';
+    var tnIsEnsaio = tn.includes('ensaio') || tn === 'ensaio';
+    var tnIsEvento = tn.includes('evento') || tn.includes('aniversario') || tn === 'evento';
+    if (cnIsEnsaio) return tnIsEnsaio && !tnIsEvento;
+    if (cnIsEvento) return tnIsEvento && !tnIsEnsaio;
     return false;
   });
   if (broad.length) return broad;
 
-  // 4. Fallback: todas as regras ativas
+  // 4. Fallback: todas as regras ativas (último recurso)
   return regras;
 }
 
@@ -2761,6 +2983,241 @@ window.bookCopyPix = function(){
     });
   }
 };
+
+/* ═══ MODAL CONSULTA DE DATAS ═══ */
+
+var _cdata = {
+  slots    : [],
+  slotMap  : {},
+  calYear  : 0,
+  calMonth : 0,
+  selDay   : null  /* dateStr do dia clicado */
+};
+
+/* Abre o modal — carrega apenas o mês vigente */
+window.abrirConsultaDatas = function(){
+  ge('cdataModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  ge('cdataTimesPanel').classList.remove('show');
+  _cdata.selDay = null;
+
+  var cat = (_cp && _cp.categoria) ? _cp.categoria : '';
+
+  /* Atualiza subtítulo com nome do pacote */
+  ge('cdataSub').textContent = _cp && _cp.nome
+    ? 'Pacote: ' + _cp.nome + ' · Clique num dia para ver os horários.'
+    : 'Clique em um dia para ver os horários disponíveis.';
+
+  ge('cdataLoader').style.display = 'flex';
+  ge('cdataDatesGrid').innerHTML  = '';
+
+  /* Usa o mesmo getDisponibilidade já existente — 90 dias de janela */
+  getDisponibilidade(90, cat)
+    .then(function(slots){
+      ge('cdataLoader').style.display = 'none';
+      _cdata.slots   = slots;
+      _cdata.slotMap = {};
+
+      slots.forEach(function(s, i){
+        var d = s.data;
+        if(!_cdata.slotMap[d]) _cdata.slotMap[d] = [];
+        _cdata.slotMap[d].push({ slot: s, idx: i });
+      });
+
+      /* Começa sempre no mês atual */
+      var now = new Date();
+      _cdata.calYear  = now.getFullYear();
+      _cdata.calMonth = now.getMonth();
+
+      _cdataRenderCal();
+    })
+    .catch(function(){
+      ge('cdataLoader').style.display = 'none';
+      ge('cdataDatesGrid').innerHTML =
+        '<div class="book-empty-state">'
+        + '<i class="fas fa-wifi" style="color:var(--muted)"></i>'
+        + 'Não foi possível carregar a agenda.<br>'
+        + '<a class="book-empty-wa-btn" href="https://wa.me/5522992497662" target="_blank" rel="noopener">'
+        + '<i class="fab fa-whatsapp"></i> Falar no WhatsApp</a></div>';
+    });
+};
+
+window.fecharConsultaDatas = function(){
+  ge('cdataModal').classList.remove('active');
+  document.body.style.overflow = '';
+};
+window.cdataClickOut = function(e){
+  if(e.target === ge('cdataModal')) fecharConsultaDatas();
+};
+
+/* Renderiza o calendário read-only dentro do modal de consulta */
+function _cdataRenderCal(){
+  var grid  = ge('cdataDatesGrid');
+  var today = new Date(); today.setHours(0,0,0,0);
+  var y = _cdata.calYear, m = _cdata.calMonth;
+
+  /* Navegar apenas entre meses que têm slots, dentro da janela de 90 dias */
+  var months = Object.keys(_cdata.slotMap).map(function(d){
+    var p = d.split('-'); return { y: +p[0], m: +p[1]-1 };
+  });
+  var minM = months.length ? months.reduce(function(a,b){ return (a.y*12+a.m)<=(b.y*12+b.m)?a:b; })
+                           : { y: y, m: m };
+  var maxM = months.length ? months.reduce(function(a,b){ return (a.y*12+a.m)>=(b.y*12+b.m)?a:b; })
+                           : { y: y, m: m };
+
+  /* Garante que mês atual está dentro dos limites */
+  if((y*12+m) < (minM.y*12+minM.m)){ y=minM.y; m=minM.m; _cdata.calYear=y; _cdata.calMonth=m; }
+  if((y*12+m) > (maxM.y*12+maxM.m)){ y=maxM.y; m=maxM.m; _cdata.calYear=y; _cdata.calMonth=m; }
+
+  var isPrevDisabled = (y*12+m) <= (minM.y*12+minM.m);
+  var isNextDisabled = (y*12+m) >= (maxM.y*12+maxM.m);
+
+  var firstDay    = new Date(y, m, 1).getDay();
+  var daysInMonth = new Date(y, m+1, 0).getDate();
+
+  var html = '<div class="book-cal-nav">'
+    + '<button class="book-cal-arrow" onclick="cdataCalPrev()"'+(isPrevDisabled?' disabled':'')+'>&#8249;</button>'
+    + '<span class="book-cal-month">'+MESES_CAL[m]+' '+y+'</span>'
+    + '<button class="book-cal-arrow" onclick="cdataCalNext()"'+(isNextDisabled?' disabled':'')+'>&#8250;</button>'
+    + '</div><div class="book-cal-grid">';
+
+  DIAS_CAL.forEach(function(d){ html += '<div class="book-cal-wd">'+d+'</div>'; });
+
+  for(var e=0; e<firstDay; e++) html += '<div class="book-cal-day"></div>';
+
+  for(var day=1; day<=daysInMonth; day++){
+    var mm      = String(m+1).padStart(2,'0');
+    var dd      = String(day).padStart(2,'0');
+    var dateStr = y+'-'+mm+'-'+dd;
+    var dt      = new Date(y, m, day); dt.setHours(0,0,0,0);
+    var isAvail = !!_cdata.slotMap[dateStr] && dt >= today;
+    var isToday = dt.getTime() === today.getTime();
+    var isSel   = _cdata.selDay === dateStr;
+    var cls     = 'book-cal-day'+(isAvail?' avail':'')+(isToday?' today':'')+(isSel?' selected':'');
+    var onclick = isAvail ? ' onclick="cdataSelectDay(\''+dateStr+'\')"' : '';
+    html += '<div class="'+cls+'" id="cdc-'+dateStr+'"'+onclick+'>'+day+'</div>';
+  }
+  html += '</div>';
+
+  /* Contador de dias com vaga no mês */
+  var diasComVaga = Object.keys(_cdata.slotMap).filter(function(d){
+    return d.startsWith(y+'-'+String(m+1).padStart(2,'0'));
+  }).length;
+
+  if(diasComVaga > 0){
+    html += '<div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--font-ui);">'
+      + '<i class="fas fa-circle-dot" style="color:var(--gold);font-size:9px;margin-right:4px;"></i>'
+      + diasComVaga + (diasComVaga===1?' dia disponível neste mês':' dias disponíveis neste mês')
+      + '</div>';
+  } else {
+    html += '<div style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px;font-family:var(--font-ui);">'
+      + 'Sem vagas neste mês. Navegue para o próximo ›'
+      + '</div>';
+  }
+
+  grid.innerHTML = html;
+}
+
+window.cdataCalPrev = function(){
+  _cdata.calMonth--;
+  if(_cdata.calMonth < 0){ _cdata.calMonth=11; _cdata.calYear--; }
+  _cdata.selDay = null;
+  ge('cdataTimesPanel').classList.remove('show');
+  _cdataRenderCal();
+};
+window.cdataCalNext = function(){
+  _cdata.calMonth++;
+  if(_cdata.calMonth > 11){ _cdata.calMonth=0; _cdata.calYear++; }
+  _cdata.selDay = null;
+  ge('cdataTimesPanel').classList.remove('show');
+  _cdataRenderCal();
+};
+
+window.cdataSelectDay = function(dateStr){
+  _cdata.selDay = dateStr;
+
+  /* Remarca visual */
+  ge('cdataDatesGrid').querySelectorAll('.book-cal-day.selected')
+    .forEach(function(d){ d.classList.remove('selected'); });
+  var el = ge('cdc-'+dateStr);
+  if(el) el.classList.add('selected');
+
+  var slotsForDay = _cdata.slotMap[dateStr] || [];
+  var parts = dateStr.split('-').map(Number);
+  var dt    = new Date(parts[0], parts[1]-1, parts[2]);
+  var DSEM  = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+
+  ge('cdataTimesLabel').textContent =
+    DSEM[dt.getDay()]+', '+parts[2]+' de '+MESES_CAL[parts[1]-1];
+
+  /* Horários — apenas exibição, sem seleção */
+  ge('cdataChips').innerHTML = slotsForDay.map(function(item){
+    return '<div class="cdata-chip"><i class="fas fa-clock"></i>'
+      + esc(item.slot.horario.substring(0,5))+'</div>';
+  }).join('');
+
+  /* Localização */
+  var loc = slotsForDay[0] && slotsForDay[0].slot.localizacao;
+  var locEl = ge('cdataLoc');
+  if(loc){ locEl.innerHTML='<i class="fas fa-location-dot"></i>'+esc(loc); locEl.style.display='flex'; }
+  else   { locEl.style.display='none'; }
+
+  /* Observações */
+  var obs   = slotsForDay[0] && slotsForDay[0].slot.observacoes;
+  var obsEl = ge('cdataObs');
+  if(obs && obs.trim()){
+    obsEl.innerHTML = '<div class="cdata-obs-title"><i class="fas fa-circle-info"></i> Orientações</div>'+esc(obs.trim());
+    obsEl.style.display = 'block';
+  } else {
+    obsEl.style.display = 'none';
+  }
+
+  /* Link WhatsApp com contexto (pacote + data de interesse) */
+  var pkgNome = (_cp && _cp.nome) ? _cp.nome : 'pacote selecionado';
+  var foneNum = (_cp && _cp.whatsapp) ? _cp.whatsapp.replace(/\D/g,'') : '5522992497662';
+  var MNOM    = ['janeiro','fevereiro','março','abril','maio','junho',
+                 'julho','agosto','setembro','outubro','novembro','dezembro'];
+  var dataFmt = DSEM[dt.getDay()]+', '+parts[2]+' de '+MNOM[parts[1]-1];
+  var horasStr = slotsForDay.map(function(i){ return i.slot.horario.substring(0,5); }).join(' / ');
+  var msg = encodeURIComponent(
+    'Olá! Fiz o quiz no site e me interessei pelo pacote *'+pkgNome+'*.\n'
+    +'Gostaria de agendar para *'+dataFmt+'* (horários disponíveis: '+horasStr+').\n'
+    +'Pode me confirmar a disponibilidade? 😊'
+  );
+  ge('cdataBtnWA').href = 'https://wa.me/'+foneNum+'?text='+msg;
+
+  ge('cdataTimesPanel').classList.add('show');
+
+  /* Scroll suave até o painel dentro do modal */
+  setTimeout(function(){
+    var panel = ge('cdataTimesPanel');
+    if(panel) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 100);
+};
+
+/* Botão "Reservar esta data" — fecha consulta, abre booking com data pré-selecionada */
+window.cdataReservarData = function(){
+  fecharConsultaDatas();
+  /* Abre o modal do produto (que tem o botão de reservar via Pix) */
+  if(_matched) openProductModal(_matched);
+  /* Aguarda o modal abrir e dispara o booking */
+  setTimeout(function(){
+    openBookModal();
+    /* Se há um dia selecionado com slot, navega para o mês e destaca o dia */
+    if(_cdata.selDay && _bk._slots){
+      var parts = _cdata.selDay.split('-').map(Number);
+      _calYear  = parts[0];
+      _calMonth = parts[1]-1;
+      _renderCal();
+      /* Simula clique no dia para abrir os horários */
+      setTimeout(function(){
+        bookCalSelectDay(_cdata.selDay);
+      }, 150);
+    }
+  }, 320);
+};
+
+/* ═══ /MODAL CONSULTA DE DATAS ═══ */
 
 /* ═══ /BOOKING SYSTEM ═══ */
 
