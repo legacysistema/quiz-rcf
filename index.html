@@ -3936,7 +3936,7 @@ prefetchProducts();
         },
         body: JSON.stringify({
           sessao_id: sessaoId,
-          evento: 'quiz_' + evento,
+          evento: evento,
           detalhe: detalhe || null
         })
       }).catch(function(){});
@@ -3977,14 +3977,14 @@ prefetchProducts();
   /* ── 2. Intercepta pick() — rastreia cada resposta do quiz ── */
   var _origPick = window.pick;
   window.pick = function(el, key, val, stepId) {
-    _ev('resposta', key + '=' + val);
+    _ev('quiz_resposta', key + '=' + val);
     if (_origPick) _origPick(el, key, val, stepId);
   };
 
   /* ── 3. Intercepta goStep() — rastreia navegação entre passos ── */
   var _origGoStep = window.goStep;
   window.goStep = function(n) {
-    _ev('step', 'passo_' + n);
+    _ev('quiz_step', 'passo_' + n);
     if (_origGoStep) _origGoStep(n);
   };
 
