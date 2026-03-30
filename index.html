@@ -78,7 +78,7 @@ body::after{
 .header-wa i{font-size:15px;color:var(--wa);}
 
 /* ── PAGE ── */
-.page{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:center;padding:28px 12px calc(80px + var(--safe-bottom));}
+.page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:28px 12px calc(80px + var(--safe-bottom));}
 
 /* ── QUIZ CARD ── */
 .quiz-card{
@@ -883,6 +883,238 @@ body::after{
   .modal-title{font-size:21px;}
   .header{padding:0 16px;}
 }
+
+/* ── SEÇÃO PROMOÇÕES ── */
+.promo-section {
+  position: relative; z-index: 1;
+  max-width: 600px; margin: 0 auto;
+  padding: 0 12px 4px;
+  display: none;
+}
+.promo-section.visible { display: block; }
+
+.promo-section-label {
+  font-family: var(--font-ui);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.6px; text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.promo-section-label::before {
+  content: '';
+  width: 14px; height: 1px;
+  background: var(--gold); opacity: .4;
+}
+.promo-section-label i {
+  color: var(--gold); font-size: 11px;
+}
+
+.promo-carousel-outer { position: relative; }
+.promo-carousel-viewport {
+  overflow: hidden;
+  border-radius: 16px;
+}
+.promo-carousel-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.promo-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px;
+  background: rgba(10,10,18,0.88);
+  border: 1px solid rgba(212,168,67,0.18);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(212,168,67,0.7); font-size: 11px;
+  cursor: pointer; z-index: 4;
+  transition: background .2s, border-color .2s, opacity .2s;
+  backdrop-filter: blur(6px);
+}
+.promo-arrow:hover {
+  background: rgba(212,168,67,0.14);
+  border-color: rgba(212,168,67,0.45);
+  color: var(--gold);
+}
+.promo-arrow--prev { left: -15px; }
+.promo-arrow--next { right: -15px; }
+.promo-arrow.hidden { opacity: 0; pointer-events: none; }
+
+.promo-dots {
+  display: flex; justify-content: center; gap: 6px;
+  margin-top: 12px;
+}
+.promo-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: background .25s, transform .25s, width .25s;
+  border: none; padding: 0;
+}
+.promo-dot.active {
+  background: var(--gold);
+  transform: scale(1.25);
+  width: 14px; border-radius: 3px;
+}
+
+.promo-quiz-card {
+  background: rgba(212,168,67,0.04);
+  border: 1px solid rgba(212,168,67,0.12);
+  border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color .25s, transform .2s, background .25s;
+  box-sizing: border-box;
+  min-height: 190px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  flex-shrink: 0;
+}
+.promo-quiz-card:hover {
+  border-color: rgba(212,168,67,0.38);
+  background: rgba(212,168,67,0.07);
+  transform: translateY(-2px);
+}
+
+.promo-quiz-banner {
+  position: relative;
+  width: 100%;
+  padding-top: 52%;
+  background: rgba(212,168,67,0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.promo-quiz-banner-track {
+  position: absolute; inset: 0;
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.promo-quiz-banner-track img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  flex-shrink: 0;
+}
+.promo-quiz-banner-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; color: rgba(212,168,67,0.3);
+}
+
+.promo-quiz-banner-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.52); color: #fff; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 4;
+  transition: background .2s;
+  opacity: 0; pointer-events: none;
+}
+.promo-quiz-card:hover .promo-quiz-banner-arrow {
+  opacity: 1; pointer-events: all;
+}
+.promo-quiz-banner-arrow:hover { background: rgba(212,168,67,0.65); }
+.promo-quiz-banner-arrow.prev { left: 7px; }
+.promo-quiz-banner-arrow.next { right: 7px; }
+
+.promo-quiz-banner-dots {
+  position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 4px; z-index: 4;
+}
+.promo-quiz-banner-dot {
+  width: 5px; height: 5px; border-radius: 3px;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer; border: none;
+  transition: width .2s, background .2s;
+}
+.promo-quiz-banner-dot.active { width: 14px; background: #fff; }
+
+.promo-quiz-banner-count {
+  position: absolute; top: 8px; right: 8px; z-index: 4;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 20px; padding: 2px 8px;
+  font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.8);
+  font-family: var(--font-ui);
+  display: flex; align-items: center; gap: 3px;
+}
+
+.promo-quiz-body {
+  padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 3px; flex: 1;
+}
+.promo-quiz-title {
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  color: var(--gold2); line-height: 1.3;
+}
+.promo-quiz-desc {
+  font-size: 11px; color: var(--muted);
+  font-family: var(--font-body); line-height: 1.45;
+}
+
+.promo-quiz-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-weight: 700;
+  background: rgba(255,170,0,0.13);
+  color: #ffaa00;
+  border: 1px solid rgba(255,170,0,0.25);
+  border-radius: 5px;
+  padding: 2px 7px;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  align-self: flex-start; margin-top: 2px;
+}
+
+.promo-quiz-cd {
+  margin-top: auto; padding-top: 7px;
+  border-top: 1px solid rgba(255,140,0,0.13);
+}
+.promo-quiz-cd.expired .promo-quiz-cd-num  { color: #ff3366; }
+
+.promo-quiz-cd-inner {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.promo-quiz-cd-icon {
+  font-size: 10px; color: #ff9944; flex-shrink: 0;
+  animation: pqPulseIcon 1.6s ease-in-out infinite;
+}
+@keyframes pqPulseIcon {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: .5; transform: scale(.8); }
+}
+.promo-quiz-cd-label {
+  font-family: var(--font-ui); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  color: #ff9944; white-space: nowrap; flex-shrink: 0;
+}
+.promo-quiz-cd-blocks {
+  display: flex; align-items: center; gap: 3px; margin-left: auto;
+}
+.promo-quiz-cd-block {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,140,0,0.07);
+  border: 1px solid rgba(255,140,0,0.18);
+  border-radius: 5px; padding: 2px 5px; min-width: 28px;
+  transition: transform .15s;
+}
+.promo-quiz-cd-block.bump { transform: scale(1.1); }
+.promo-quiz-cd-num {
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  color: #fff; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.promo-quiz-cd-unit {
+  font-family: var(--font-ui); font-size: 6px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .7px; color: #ff9944;
+}
+.promo-quiz-cd-sep {
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,140,0,0.45);
+  animation: pqBlinkSep 1s step-end infinite;
+  line-height: 1; align-self: center; padding-bottom: 7px;
+}
+@keyframes pqBlinkSep {
+  0%,100% { opacity: 1; }
+  50%     { opacity: .15; }
+}
 </style>
 </head>
 <body>
@@ -897,7 +1129,8 @@ body::after{
   </a>
 </header>
 
-<div class="page">
+<div class="page" style="flex-direction:column;align-items:center;">
+
   <div class="quiz-card">
     <div class="quiz-topbar"></div>
     <div class="quiz-inner">
@@ -1052,6 +1285,33 @@ body::after{
 
     </div>
   </div>
+
+<!-- ── PROMOÇÕES EM DESTAQUE ── -->
+<section class="promo-section" id="promoSection" style="padding:16px 0 0;max-width:560px;width:100%;margin:0;">
+  <div class="promo-section-label">
+    <i class="fas fa-bolt"></i> Promoções em destaque
+  </div>
+
+  <div class="promo-carousel-outer" id="promoCarouselOuter">
+    <button class="promo-arrow promo-arrow--prev hidden" id="promoArrowPrev"
+            onclick="promoCarousel.prev()" aria-label="Anterior">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="promo-arrow promo-arrow--next hidden" id="promoArrowNext"
+            onclick="promoCarousel.next()" aria-label="Próximo">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <div class="promo-carousel-viewport">
+      <div class="promo-carousel-track" id="promoCarouselTrack">
+        <!-- Cards injetados via JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="promo-dots" id="promoCarouselDots"></div>
+</section>
+
 </div>
 
 <div class="footer">© 2026 Rodrigo Costa Fotografia · @rodrigocostafotografia</div>
@@ -1376,6 +1636,7 @@ Quer uma data futura? É só chamar no WhatsApp
 var _su = atob('aHR0cHM6Ly9sZWRwcWN5bnZxYmRiY2NlYmhiby5zdXBhYmFzZS5jbw==');
 var _sk = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW14bFpIQnhZM2x1ZG5GaVpHSmpZMlZpYUdKdklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpBek9EYzNNamdzSW1WNGNDSTZNakE0TlRrMk16Y3lPSDAuczhHT3pwNHdvdWpHdURjNHZLOVFYSWYzY1dMTUVOVW5KZkU0bHRfWWhMZw==');
 var _db = window.supabase.createClient(_su, _sk);
+window._db = _db; /* expõe para o módulo de promoções */
 
 /* ═══ STATE ═══ */
 var A = {};
@@ -3250,6 +3511,365 @@ function prefetchProducts(){
 buildStep2();
 buildStep3();
 prefetchProducts();
+
+})();
+</script>
+
+<!-- ── MÓDULO: CARDS PROMOCIONAIS ── -->
+<script>
+(function () {
+  'use strict';
+
+  var AUTO_MS   = 4500;
+  var MAX_ITEMS = 8;
+  var MAX_WAIT  = 8000;
+  var CHECK_INT = 200;
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function ge(id) { return document.getElementById(id); }
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function perPage() {
+    return 1;
+  }
+
+  var _bannerState    = {};
+  var _pendingBanners = [];
+  var _cdRegistry     = {};
+  var _pendingCds     = [];
+
+  function buildCard(r) {
+    var fotos = [];
+    ['foto_url','foto2_url','foto3_url','foto4_url','foto5_url'].forEach(function(k) {
+      if (r[k] && r[k].trim()) fotos.push(r[k].trim());
+    });
+
+    var bid = 'pqb-' + Math.random().toString(36).slice(2, 8);
+    var bannerContent = '';
+
+    if (fotos.length === 0) {
+      bannerContent = '<div class="promo-quiz-banner-placeholder"><i class="fas fa-camera"></i></div>';
+    } else {
+      bannerContent =
+        '<div class="promo-quiz-banner-track" id="' + bid + '-track">'
+        + fotos.map(function(u) {
+            return '<img src="' + esc(u) + '" alt="' + esc(r.titulo) + '"'
+              + ' style="flex-shrink:0;width:100%;height:100%;object-fit:cover;object-position:center top;"'
+              + ' loading="lazy" onerror="this.style.display=\'none\'">';
+          }).join('')
+        + '</div>';
+
+      if (fotos.length > 1) {
+        bannerContent
+          += '<button class="promo-quiz-banner-arrow prev" id="' + bid + '-prev"'
+           + ' onclick="event.stopPropagation();promoBannerMove(\'' + bid + '\',-1)">'
+           + '<i class="fas fa-chevron-left"></i></button>'
+           + '<button class="promo-quiz-banner-arrow next" id="' + bid + '-next"'
+           + ' onclick="event.stopPropagation();promoBannerMove(\'' + bid + '\',1)">'
+           + '<i class="fas fa-chevron-right"></i></button>'
+           + '<div class="promo-quiz-banner-dots" id="' + bid + '-dots">'
+           + fotos.map(function(_, i) {
+               return '<button class="promo-quiz-banner-dot' + (i === 0 ? ' active' : '') + '"'
+                 + ' onclick="event.stopPropagation();promoBannerGo(\'' + bid + '\',' + i + ')"></button>';
+             }).join('')
+           + '</div>'
+           + '<div class="promo-quiz-banner-count"><i class="fas fa-images"></i>' + fotos.length + '</div>';
+        _pendingBanners.push({ id: bid, total: fotos.length });
+      }
+    }
+
+    var cdBlock = '';
+    if (r.validade) {
+      var uid = 'pqcd-' + Math.random().toString(36).slice(2, 8);
+      _pendingCds.push({ id: uid, validade: r.validade });
+      _cdRegistry[uid] = r.validade;
+      cdBlock =
+        '<div class="promo-quiz-cd" id="' + uid + '">'
+        + '<div class="promo-quiz-cd-inner">'
+        + '<i class="fas fa-hourglass-half promo-quiz-cd-icon"></i>'
+        + '<span class="promo-quiz-cd-label">Encerra em</span>'
+        + '<div class="promo-quiz-cd-blocks">'
+        + '<div class="promo-quiz-cd-block"><span class="promo-quiz-cd-num" data-unit="d">00</span><span class="promo-quiz-cd-unit">dias</span></div>'
+        + '<span class="promo-quiz-cd-sep">:</span>'
+        + '<div class="promo-quiz-cd-block"><span class="promo-quiz-cd-num" data-unit="h">00</span><span class="promo-quiz-cd-unit">h</span></div>'
+        + '<span class="promo-quiz-cd-sep">:</span>'
+        + '<div class="promo-quiz-cd-block"><span class="promo-quiz-cd-num" data-unit="m">00</span><span class="promo-quiz-cd-unit">min</span></div>'
+        + '</div></div></div>';
+    }
+
+    var badgeHtml = '';
+    if (r.badge && r.badge.trim()) {
+      badgeHtml = '<span class="promo-quiz-badge"><i class="fas fa-tag"></i>' + esc(r.badge) + '</span>';
+    }
+
+    return '<div class="promo-quiz-card">'
+      + '<div class="promo-quiz-banner">' + bannerContent + '</div>'
+      + '<div class="promo-quiz-body">'
+      + '<div class="promo-quiz-title">' + esc(r.titulo) + '</div>'
+      + (r.descricao ? '<div class="promo-quiz-desc">' + esc(r.descricao) + '</div>' : '')
+      + badgeHtml
+      + cdBlock
+      + '</div></div>';
+  }
+
+  window.promoBannerGo = function(bid, idx) {
+    var track = ge(bid + '-track');
+    if (!track) return;
+    var state = _bannerState[bid] || { idx: 0, total: track.children.length };
+    state.idx = idx;
+    _bannerState[bid] = state;
+    var w = track.parentElement ? track.parentElement.offsetWidth : 0;
+    track.style.transform = 'translateX(-' + (idx * w) + 'px)';
+    var dots = ge(bid + '-dots');
+    if (dots) {
+      dots.querySelectorAll('.promo-quiz-banner-dot').forEach(function(d, i) {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+    var prev = ge(bid + '-prev'), next = ge(bid + '-next');
+    if (prev) prev.style.opacity = idx === 0 ? '0' : '';
+    if (next) next.style.opacity = idx >= state.total - 1 ? '0' : '';
+  };
+
+  window.promoBannerMove = function(bid, dir) {
+    var track = ge(bid + '-track');
+    if (!track) return;
+    var state = _bannerState[bid] || { idx: 0, total: track.children.length };
+    window.promoBannerGo(bid, Math.min(Math.max(state.idx + dir, 0), state.total - 1));
+  };
+
+  function initBanners() {
+    _pendingBanners.forEach(function(item) {
+      _bannerState[item.id] = { idx: 0, total: item.total };
+      window.promoBannerGo(item.id, 0);
+    });
+    _pendingBanners = [];
+  }
+
+  function initCountdowns() {
+    var toInit = _pendingCds.slice();
+    Object.keys(_cdRegistry).forEach(function(id) {
+      if (!toInit.some(function(x) { return x.id === id; })) {
+        if (ge(id)) toInit.push({ id: id, validade: _cdRegistry[id] });
+      }
+    });
+    _pendingCds = [];
+
+    toInit.forEach(function(item) {
+      var wrap = ge(item.id);
+      if (!wrap || wrap._cdRunning) return;
+      wrap._cdRunning = true;
+
+      var endDate = new Date(item.validade + 'T23:59:59');
+      var dEl = wrap.querySelector('[data-unit="d"]');
+      var hEl = wrap.querySelector('[data-unit="h"]');
+      var mEl = wrap.querySelector('[data-unit="m"]');
+
+      function tick(el, v) {
+        if (!el) return;
+        var s = pad(v);
+        if (el.textContent === s) return;
+        el.textContent = s;
+        el.parentElement.classList.add('bump');
+        setTimeout(function() { el.parentElement.classList.remove('bump'); }, 180);
+      }
+
+      function run() {
+        if (!ge(item.id)) { clearInterval(wrap._cdInterval); return; }
+        var diff = endDate - new Date();
+        if (diff <= 0) {
+          wrap.classList.add('expired');
+          [dEl, hEl, mEl].forEach(function(el) { if (el) el.textContent = '00'; });
+          clearInterval(wrap._cdInterval);
+          return;
+        }
+        var total = Math.floor(diff / 1000);
+        tick(dEl, Math.floor(total / 86400));
+        tick(hEl, Math.floor((total % 86400) / 3600));
+        tick(mEl, Math.floor((total % 3600) / 60));
+      }
+      run();
+      wrap._cdInterval = setInterval(run, 30000);
+    });
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState !== 'visible') return;
+    document.querySelectorAll('[id^="pqcd-"]').forEach(function(wrap) {
+      if (!wrap._cdRunning) return;
+      var validade = _cdRegistry[wrap.id];
+      if (!validade) return;
+      var endDate = new Date(validade + 'T23:59:59');
+      var diff = endDate - new Date();
+      if (diff <= 0) return;
+      var total = Math.floor(diff / 1000);
+      var dEl = wrap.querySelector('[data-unit="d"]');
+      var hEl = wrap.querySelector('[data-unit="h"]');
+      var mEl = wrap.querySelector('[data-unit="m"]');
+      if (dEl) dEl.textContent = pad(Math.floor(total / 86400));
+      if (hEl) hEl.textContent = pad(Math.floor((total % 86400) / 3600));
+      if (mEl) mEl.textContent = pad(Math.floor((total % 3600) / 60));
+    });
+  });
+
+  var _page  = 0;
+  var _cards = [];
+  var _timer = null;
+  var _built = false;
+
+  function pages()   { return Math.max(1, Math.ceil(_cards.length / perPage())); }
+
+  function render() {
+    var track = ge('promoCarouselTrack');
+    var dots  = ge('promoCarouselDots');
+    var prev  = ge('promoArrowPrev');
+    var next  = ge('promoArrowNext');
+    if (!track) return;
+
+    var vpW = track.parentElement ? track.parentElement.offsetWidth : 0;
+    track.style.transform = 'translateX(-' + (_page * vpW) + 'px)';
+
+    if (dots) {
+      dots.innerHTML = '';
+      for (var i = 0; i < pages(); i++) {
+        var btn = document.createElement('button');
+        btn.className = 'promo-dot' + (i === _page ? ' active' : '');
+        btn.setAttribute('aria-label', 'Página ' + (i + 1));
+        (function(idx) { btn.onclick = function() { promoCarousel.go(idx); }; })(i);
+        dots.appendChild(btn);
+      }
+    }
+
+    if (prev) prev.classList.toggle('hidden', _page === 0);
+    if (next) next.classList.toggle('hidden', _page >= pages() - 1);
+  }
+
+  function build() {
+    var track = ge('promoCarouselTrack');
+    if (!track) return;
+    var vpW = track.parentElement ? track.parentElement.offsetWidth : 0;
+    if (vpW < 10) { setTimeout(build, 200); return; }
+
+    var pp  = perPage();
+    var gap = 10;
+    var cardW = Math.floor((vpW - gap * (pp - 1)) / pp);
+
+    var pageGroups = [];
+    for (var i = 0; i < _cards.length; i += pp) pageGroups.push(_cards.slice(i, i + pp));
+
+    track.innerHTML = pageGroups.map(function(group) {
+      var html = group.join('');
+      var clone = group.slice();
+      while (clone.length < pp) {
+        html += '<div class="promo-quiz-card" style="visibility:hidden;flex:0 0 ' + cardW + 'px;min-width:' + cardW + 'px;"></div>';
+        clone.push('');
+      }
+      return '<div style="display:flex;gap:' + gap + 'px;flex:0 0 ' + vpW + 'px;min-width:' + vpW + 'px;box-sizing:border-box;">' + html + '</div>';
+    }).join('');
+
+    track.querySelectorAll('.promo-quiz-card:not([style*="visibility"])').forEach(function(node) {
+      node.style.flex     = '0 0 ' + cardW + 'px';
+      node.style.minWidth = cardW + 'px';
+      node.style.maxWidth = cardW + 'px';
+    });
+
+    if (_page >= pages()) _page = pages() - 1;
+    _built = true;
+    render();
+    startAuto();
+
+    setTimeout(function() { initCountdowns(); initBanners(); }, 0);
+  }
+
+  function startAuto() {
+    stopAuto();
+    if (pages() <= 1) return;
+    _timer = setInterval(function() {
+      _page = (_page + 1) % pages();
+      render();
+    }, AUTO_MS);
+  }
+  function stopAuto() { if (_timer) { clearInterval(_timer); _timer = null; } }
+
+  var outer = ge('promoCarouselOuter');
+  if (outer) {
+    outer.addEventListener('mouseenter', stopAuto);
+    outer.addEventListener('mouseleave', function() { if (_built) startAuto(); });
+  }
+
+  var _resizeTimer = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(function() {
+      if (_built) { _page = 0; build(); }
+    }, 250);
+  });
+
+  window.promoCarousel = {
+    load: function(cardHtmlArray) {
+      _cards = cardHtmlArray;
+      var section = ge('promoSection');
+      if (!_cards.length) return;
+      if (section) section.classList.add('visible');
+      build();
+    },
+    prev: function() {
+      if (_page > 0) { _page--; render(); startAuto(); }
+    },
+    next: function() {
+      if (_page < pages() - 1) { _page++; render(); startAuto(); }
+    },
+    go: function(i) { _page = i; render(); startAuto(); }
+  };
+
+  async function fetchPromocoes(db) {
+    var hoje = new Date().toISOString().split('T')[0];
+    try {
+      var result = await db
+        .from('promocoes')
+        .select('*')
+        .eq('ativo', true)
+        .order('criado_em', { ascending: false })
+        .limit(MAX_ITEMS);
+
+      var promos = (result.data || []).filter(function(r) {
+        return !r.validade || r.validade >= hoje;
+      });
+
+      renderPromocoes(promos);
+    } catch (err) {
+      console.warn('[PromoQuiz] Erro ao buscar promoções:', err);
+    }
+  }
+
+  function renderPromocoes(promos) {
+    if (!promos || !promos.length) return;
+    var cardHtmlArray = promos.map(buildCard);
+    promoCarousel.load(cardHtmlArray);
+  }
+
+  var _elapsed = 0;
+
+  function init() {
+    var db = window._db || window._dbPS;
+    if (db) {
+      fetchPromocoes(db);
+      return;
+    }
+    _elapsed += CHECK_INT;
+    if (_elapsed < MAX_WAIT) {
+      setTimeout(init, CHECK_INT);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 300); });
+  } else {
+    setTimeout(init, 300);
+  }
 
 })();
 </script>
