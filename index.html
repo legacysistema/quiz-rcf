@@ -1115,6 +1115,34 @@ body::after{
   0%,100% { opacity: 1; }
   50%     { opacity: .15; }
 }
+
+/* ── BOTÃO RESERVAR PROMOÇÃO (WhatsApp) ── */
+.promo-quiz-wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 8px; padding: 9px 12px; min-height: 38px;
+  background: linear-gradient(135deg, rgba(37,211,102,0.15), rgba(37,211,102,0.07));
+  border: 1px solid rgba(37,211,102,0.30);
+  border-radius: 10px;
+  color: var(--wa);
+  font-size: 12px; font-weight: 700;
+  font-family: var(--font-ui);
+  text-decoration: none;
+  letter-spacing: .2px;
+  transition: background .2s, border-color .2s, box-shadow .2s;
+  box-shadow: 0 2px 14px rgba(37,211,102,0.08);
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+.promo-quiz-wa-btn i {
+  font-size: 14px; flex-shrink: 0;
+}
+.promo-quiz-wa-btn:active,
+.promo-quiz-wa-btn:hover {
+  background: linear-gradient(135deg, rgba(37,211,102,0.24), rgba(37,211,102,0.14));
+  border-color: var(--wa);
+  box-shadow: 0 4px 20px rgba(37,211,102,0.18);
+}
 </style>
 </head>
 <body>
@@ -3605,6 +3633,11 @@ prefetchProducts();
       badgeHtml = '<span class="promo-quiz-badge"><i class="fas fa-tag"></i>' + esc(r.badge) + '</span>';
     }
 
+    var waMsg = encodeURIComponent('Olá, Rodrigo! Vi a promoção "' + r.titulo + '" e quero reservar. Pode me dar mais detalhes?');
+    var waBtn = '<a class="promo-quiz-wa-btn" href="https://wa.me/5522992497662?text=' + waMsg + '" target="_blank" rel="noopener">'
+      + '<i class="fab fa-whatsapp"></i> Reservar esta Promoção'
+      + '</a>';
+
     return '<div class="promo-quiz-card">'
       + '<div class="promo-quiz-banner">' + bannerContent + '</div>'
       + '<div class="promo-quiz-body">'
@@ -3612,6 +3645,7 @@ prefetchProducts();
       + (r.descricao ? '<div class="promo-quiz-desc">' + esc(r.descricao) + '</div>' : '')
       + badgeHtml
       + cdBlock
+      + waBtn
       + '</div></div>';
   }
 
