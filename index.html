@@ -413,6 +413,18 @@ body::after{
   display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;
 }
 .btn-pix-modal:active{background:linear-gradient(135deg,rgba(0,217,245,0.2),rgba(0,217,245,0.1));border-color:var(--cyan);}
+.btn-pdf-modal{
+  width:100%;padding:13px 16px;min-height:48px;
+  background:rgba(212,168,67,0.06);
+  border:1px solid rgba(212,168,67,0.22);border-radius:14px;
+  color:var(--gold);font-size:13px;font-weight:600;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;letter-spacing:.2px;
+}
+.btn-pdf-modal:active{background:rgba(212,168,67,0.14);border-color:rgba(212,168,67,0.44);box-shadow:0 4px 18px rgba(212,168,67,0.12);}
+.btn-pdf-modal i{font-size:13px;}
+.btn-pdf-modal.loading{opacity:.6;pointer-events:none;}
 .pix-status{display:none;text-align:center;padding:10px;border-radius:10px;background:rgba(0,228,154,0.08);border:1px solid rgba(0,228,154,0.2);color:var(--green);font-size:13px;font-family:var(--font-ui);}
 .pix-status.show{display:block;}
 
@@ -1143,6 +1155,60 @@ body::after{
   border-color: var(--wa);
   box-shadow: 0 4px 20px rgba(37,211,102,0.18);
 }
+/* ── BOTÃO PDF — destaque ── */
+.btn-pdf-modal {
+  width:100%;padding:13px 16px;min-height:48px;
+  background: linear-gradient(135deg,rgba(212,168,67,0.13),rgba(212,168,67,0.06));
+  border:1.5px dashed rgba(212,168,67,0.45);border-radius:14px;
+  color:var(--gold2);font-size:13px;font-weight:700;
+  font-family:var(--font-ui);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;letter-spacing:.3px;
+  box-shadow: 0 2px 16px rgba(212,168,67,0.10);
+}
+.btn-pdf-modal:hover,.btn-pdf-modal:active{
+  background:linear-gradient(135deg,rgba(212,168,67,0.22),rgba(212,168,67,0.11));
+  border-color:var(--gold);border-style:solid;
+  box-shadow:0 4px 22px rgba(212,168,67,0.18);
+}
+.btn-pdf-modal i{font-size:14px;}
+
+/* ── IMPRESSÃO / SALVAR COMO PDF ── */
+@media print {
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  body > *{ display:none !important; }
+  #__printArea{
+    display:block !important;
+    position:fixed;inset:0;
+    background:#09090f;color:#ededf4;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;line-height:1.65;padding:0;margin:0;z-index:99999;
+  }
+  #__printArea .pa-header{padding:22px 28px 18px;border-bottom:1px solid rgba(212,168,67,0.25);background:#09090f;}
+  #__printArea .pa-brand{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#d4a843;font-weight:700;margin-bottom:6px;}
+  #__printArea .pa-title{font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin-bottom:3px;}
+  #__printArea .pa-cat{font-size:11px;color:#6e6e8a;text-transform:uppercase;letter-spacing:1px;}
+  #__printArea .pa-body{padding:20px 28px 24px;background:#09090f;}
+  #__printArea .pa-price-val{font-family:'DM Serif Display',serif;font-size:32px;color:#00e49a;margin-bottom:2px;}
+  #__printArea .pa-price-base{font-size:11px;color:#6e6e8a;margin-bottom:18px;}
+  #__printArea .pa-desc{color:#9090aa;font-size:13px;line-height:1.7;margin-bottom:20px;}
+  #__printArea .pa-section-label{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6e6e8a;font-weight:700;margin-bottom:10px;}
+  #__printArea .pa-incluso{list-style:none;margin-bottom:20px;}
+  #__printArea .pa-incluso li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#ededf4;padding:4px 0;}
+  #__printArea .pa-incluso li .pi-icon{color:#00e49a;font-size:10px;margin-top:3px;flex-shrink:0;}
+  #__printArea .pa-extras-title{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6e6e8a;font-weight:700;margin-bottom:10px;}
+  #__printArea .pa-extra-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid rgba(255,255,255,0.08);border-radius:9px;margin-bottom:6px;background:rgba(255,255,255,0.02);}
+  #__printArea .pa-extra-item.pa-checked{border-color:rgba(0,217,245,0.3);background:rgba(0,217,245,0.04);}
+  #__printArea .pa-extra-name{font-size:12.5px;color:#ededf4;font-weight:500;}
+  #__printArea .pa-extra-name.pa-checked-name{color:#00d9f5;}
+  #__printArea .pa-extra-price{font-size:12.5px;color:#00d9f5;font-weight:700;}
+  #__printArea .pa-total{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;margin:18px 0;background:rgba(0,228,154,0.05);border:1px solid rgba(0,228,154,0.18);border-radius:12px;}
+  #__printArea .pa-total-label{font-size:11px;color:#6e6e8a;text-transform:uppercase;letter-spacing:.8px;}
+  #__printArea .pa-total-val{font-family:'DM Serif Display',serif;font-size:24px;color:#00e49a;}
+  #__printArea .pa-footer{padding:14px 28px;margin-top:8px;border-top:1px solid rgba(255,255,255,0.06);font-size:10px;color:#6e6e8a;text-align:center;letter-spacing:.4px;background:#09090f;}
+  #__printArea .pa-cover{width:100%;max-height:260px;overflow:hidden;background:#000;page-break-inside:avoid;}
+  #__printArea .pa-cover img{width:100%;height:260px;object-fit:cover;object-position:top center;display:block;}
+}
 </style>
 </head>
 <body>
@@ -1388,6 +1454,7 @@ body::after{
           <span class="btn-pix-hint">Reserva Pix confirmada em minutos</span>
         </button>
         <button class="btn-wa-modal btn-wa-secondary" id="modalBtnWA" onclick="openWA()"><i class="fab fa-whatsapp"></i> Prefiro combinar pelo WhatsApp</button>
+        <button class="btn-pdf-modal" id="modalBtnPDF" onclick="baixarPDF()"><i class="fas fa-file-arrow-down"></i> Baixar PDF</button>
         <div class="pix-status" id="pixStatus"><i class="fas fa-circle-check"></i> Chave Pix copiada!</div>
       </div>
     </div>
@@ -3906,6 +3973,182 @@ prefetchProducts();
   }
 
 })();
+</script>
+
+<!-- ── BAIXAR PDF ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function baixarPDF() {
+  /* ── Coleta dados do modal ── */
+  var titulo    = (document.getElementById('modalTitle')    || {}).textContent || 'pacote';
+  var cat       = (document.getElementById('modalCat')      || {}).textContent || '';
+  var preco     = (document.getElementById('modalTotalVal') || {}).textContent || '';
+  var precoBase = (document.getElementById('modalPriceBase')|| {}).textContent || '';
+  var desc      = (document.getElementById('modalDesc')     || {}).textContent || '';
+  var total     = (document.getElementById('modalTotal')    || {}).textContent || '';
+
+  var coverImg = document.querySelector('#modalCarouselTrack img');
+  var coverSrc = coverImg ? coverImg.src : '';
+
+  var inclusoItems = [];
+  document.querySelectorAll('#modalInclusoList li').forEach(function(li) {
+    inclusoItems.push(li.textContent.trim());
+  });
+
+  var extrasItems = [];
+  document.querySelectorAll('#modalExtrasList .extra-item').forEach(function(item) {
+    extrasItems.push({
+      nome:    (item.querySelector('.extra-name')  || {}).textContent || '',
+      preco:   (item.querySelector('.extra-price') || {}).textContent || '',
+      checked: item.classList.contains('checked')
+    });
+  });
+
+  /* ── Nome do arquivo ── */
+  var nomePacote = titulo.replace(/[^a-zA-Z0-9À-ú\s]/g, '').trim().replace(/\s+/g, '_').toLowerCase() || 'pacote';
+
+  /* ── Overlay de loading ── */
+  var overlay = document.createElement('div');
+  overlay.id = '__pdfOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(7,7,12,0.96);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;';
+  overlay.innerHTML = '<div style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(212,168,67,0.2);border-top-color:#d4a843;animation:spin 0.8s linear infinite;"></div>'
+    + '<span style="color:#d4a843;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:600;">Gerando PDF\u2026</span>';
+  document.body.appendChild(overlay);
+
+  var btnPdf = document.querySelector('.btn-pdf-modal');
+  if (btnPdf) btnPdf.classList.add('loading');
+
+  function cleanup() {
+    var ov = document.getElementById('__pdfOverlay');
+    if (ov) ov.remove();
+    if (btnPdf) btnPdf.classList.remove('loading');
+  }
+
+  /* ── Monta HTML do PDF num iframe invisível ── */
+  var W = 800;
+
+  var inclusoBullets = inclusoItems.map(function(t) {
+    return '<li><span style="color:#00e49a;font-size:10px;margin-top:3px;flex-shrink:0;">\u2713</span><span>' + t + '</span></li>';
+  }).join('');
+
+  var extrasHTML = '';
+  if (extrasItems.length) {
+    extrasHTML = '<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6e6e8a;font-weight:700;margin:0 0 10px;">Extras disponíveis</div>';
+    extrasItems.forEach(function(ex) {
+      var bg  = ex.checked ? 'rgba(0,217,245,0.04)' : 'rgba(255,255,255,0.02)';
+      var bdr = ex.checked ? '1px solid rgba(0,217,245,0.3)' : '1px solid rgba(255,255,255,0.08)';
+      var nc  = ex.checked ? '#00d9f5' : '#ededf4';
+      extrasHTML += '<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:' + bdr + ';border-radius:9px;margin-bottom:6px;background:' + bg + ';">'
+        + '<span style="font-size:12.5px;color:' + nc + ';font-weight:500;">' + (ex.checked ? '\u2713 ' : '') + ex.nome + '</span>'
+        + '<span style="font-size:12.5px;color:#00d9f5;font-weight:700;">' + ex.preco + '</span>'
+        + '</div>';
+    });
+  }
+
+  var coverHTML = coverSrc
+    ? '<div style="width:100%;height:260px;overflow:hidden;background:#000;"><img src="' + coverSrc + '" crossorigin="anonymous" style="width:100%;height:260px;object-fit:cover;object-position:top center;display:block;"></div>'
+    : '';
+
+  var bodyHTML = '<html><head><meta charset="UTF-8">'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    + '<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'
+    + '<style>'
+    + '*{margin:0;padding:0;box-sizing:border-box;}'
+    + 'body{width:' + W + 'px;background:#09090f;color:#ededf4;font-family:"DM Sans",sans-serif;font-size:13px;line-height:1.65;}'
+    + '</style></head><body>'
+    + coverHTML
+    + '<div style="padding:22px 28px 18px;border-bottom:1px solid rgba(212,168,67,0.25);background:#09090f;">'
+    +   '<div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#d4a843;font-weight:700;margin-bottom:6px;">Rodrigo Costa Fotografia</div>'
+    +   '<div style="font-family:\'DM Serif Display\',serif;font-size:24px;color:#fff;margin-bottom:3px;">' + titulo + '</div>'
+    +   '<div style="font-size:11px;color:#6e6e8a;text-transform:uppercase;letter-spacing:1px;">' + cat + '</div>'
+    + '</div>'
+    + '<div style="padding:20px 28px 24px;background:#09090f;">'
+    +   '<div style="font-family:\'DM Serif Display\',serif;font-size:32px;color:#00e49a;margin-bottom:2px;">' + preco + '</div>'
+    +   '<div style="font-size:11px;color:#6e6e8a;margin-bottom:18px;">' + precoBase + '</div>'
+    +   '<div style="color:#9090aa;font-size:13px;line-height:1.7;margin-bottom:20px;">' + desc + '</div>'
+    + (inclusoItems.length
+        ? '<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6e6e8a;font-weight:700;margin-bottom:10px;">O que está incluso</div>'
+          + '<ul style="list-style:none;margin-bottom:20px;">' + inclusoBullets + '</ul>'
+        : '')
+    +   extrasHTML
+    +   '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;margin:18px 0;background:rgba(0,228,154,0.05);border:1px solid rgba(0,228,154,0.18);border-radius:12px;">'
+    +     '<span style="font-size:11px;color:#6e6e8a;text-transform:uppercase;letter-spacing:.8px;">Total do pedido</span>'
+    +     '<span style="font-family:\'DM Serif Display\',serif;font-size:24px;color:#00e49a;">' + total + '</span>'
+    +   '</div>'
+    + '</div>'
+    + '<div style="padding:14px 28px;border-top:1px solid rgba(255,255,255,0.06);font-size:10px;color:#6e6e8a;text-align:center;letter-spacing:.4px;background:#09090f;">'
+    +   'rodrigocostafotografia.com \u00b7 @rodrigocostafotografia \u00b7 (22) 99249-7662'
+    + '</div>'
+    + '</body></html>';
+
+  /* ── Cria iframe fora da tela ── */
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:fixed;left:0;top:0;width:' + W + 'px;height:1px;border:none;opacity:0;pointer-events:none;z-index:-1;';
+  document.body.appendChild(iframe);
+
+  iframe.contentDocument.open();
+  iframe.contentDocument.write(bodyHTML);
+  iframe.contentDocument.close();
+
+  /* Aguarda fontes e imagens carregarem antes de capturar */
+  setTimeout(function() {
+    var docEl = iframe.contentDocument.body;
+    var fullH = iframe.contentDocument.documentElement.scrollHeight;
+    iframe.style.height = fullH + 'px';
+
+    html2canvas(docEl, {
+      scale:           2,
+      useCORS:         true,
+      allowTaint:      true,
+      backgroundColor: '#09090f',
+      logging:         false,
+      width:           W,
+      height:          fullH,
+      windowWidth:     W,
+      windowHeight:    fullH,
+      scrollX:         0,
+      scrollY:         0
+    }).then(function(canvas) {
+      iframe.remove();
+
+      var imgData = canvas.toDataURL('image/jpeg', 0.95);
+      var pdf     = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+      var pageW   = pdf.internal.pageSize.getWidth();
+      var pageH   = pdf.internal.pageSize.getHeight();
+      var margin  = 8;
+      var imgW    = pageW - margin * 2;
+      var imgH    = (canvas.height / canvas.width) * imgW;
+
+      var y = margin;
+      if (imgH <= pageH - margin * 2) {
+        pdf.addImage(imgData, 'JPEG', margin, y, imgW, imgH);
+      } else {
+        /* Pagina o conteúdo longo */
+        var pageImgH = pageH - margin * 2;
+        var srcH     = (pageImgH / imgW) * canvas.width;
+        var srcY     = 0;
+        while (srcY < canvas.height) {
+          var slice = document.createElement('canvas');
+          slice.width  = canvas.width;
+          slice.height = Math.min(srcH, canvas.height - srcY);
+          slice.getContext('2d').drawImage(canvas, 0, srcY, slice.width, slice.height, 0, 0, slice.width, slice.height);
+          var sliceH = (slice.height / canvas.width) * imgW;
+          pdf.addImage(slice.toDataURL('image/jpeg', 0.95), 'JPEG', margin, margin, imgW, sliceH);
+          srcY += srcH;
+          if (srcY < canvas.height) pdf.addPage();
+        }
+      }
+
+      pdf.save(nomePacote + '.pdf');
+      cleanup();
+    }).catch(function(err) {
+      console.error('html2canvas error:', err);
+      iframe.remove();
+      cleanup();
+    });
+  }, 1200); /* 1.2s para fontes Google carregarem no iframe */
+}
 </script>
 </body>
 </html>
