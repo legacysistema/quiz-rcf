@@ -515,10 +515,17 @@ function getDisponibilidade(periodo, cat){
     .neq('status','cancelado')
     .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
 
-  return Promise.all([q1,q2,q3]).then(function(res){
+  // Bloqueios recorrentes cadastrados no ADM (por categoria/pacote/dia da semana)
+  var q4 = _db.from('agenda_bloqueios_recorrentes')
+    .select('dias_semana,horarios_bloqueados,data_inicio,data_fim,categoria,pacote_nome,ativo')
+    .eq('ativo',true)
+    .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
+
+  return Promise.all([q1,q2,q3,q4]).then(function(res){
     var regras    = filterRegras(res[0], cat);
     var excecoes  = res[1];
     var agendados = res[2];
+    var bloqRecs  = res[3];
 
     var excSet={}, bookSet={};
     excecoes.forEach(function(e){
@@ -529,6 +536,29 @@ function getDisponibilidade(periodo, cat){
     agendados.forEach(function(a){
       bookSet[a.data+'_'+(a.horario||'').substring(0,5)]=true;
     });
+
+    // Verifica se um slot está coberto por algum bloqueio recorrente do ADM
+    function _isBloqRec(ds, horario){
+      var parts  = ds.split('-').map(Number);
+      var diaSem = new Date(parts[0], parts[1]-1, parts[2]).getDay();
+      for(var bi=0; bi<bloqRecs.length; bi++){
+        var b = bloqRecs[bi];
+        if(b.data_inicio && ds<b.data_inicio) continue;
+        if(b.data_fim    && ds>b.data_fim)    continue;
+        var dias; try{ dias=Array.isArray(b.dias_semana)?b.dias_semana:JSON.parse(b.dias_semana||'[]'); }catch(_){ continue; }
+        if(!dias.map(Number).includes(diaSem)) continue;
+        var hbs; try{ hbs=Array.isArray(b.horarios_bloqueados)?b.horarios_bloqueados:JSON.parse(b.horarios_bloqueados||'[]'); }catch(_){ hbs=[]; }
+        var horOk = hbs.length===0 || hbs.some(function(h){ return String(h).substring(0,5)===String(horario).substring(0,5); });
+        if(!horOk) continue;
+        if(b.categoria && cat){
+          var bc=(b.categoria||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+          var cc=(cat||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+          if(bc&&cc&&bc!==cc&&!cc.includes(bc)&&!bc.includes(cc)) continue;
+        }
+        return true;
+      }
+      return false;
+    }
 
     var slots=[], seen={};
     var cur = new Date(inicio);
@@ -550,6 +580,8 @@ function getDisponibilidade(periodo, cat){
           var key=ds+'_'+hs;
           if(excSet[ds+'_*']||excSet[key]) return;
           if(bookSet[key]) return;
+          // Bloqueio recorrente cadastrado no ADM
+          if(_isBloqRec(ds,hs)) return;
           if(seen[key]) return;
           seen[key]=true;
           slots.push({
