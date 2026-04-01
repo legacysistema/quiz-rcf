@@ -1,1 +1,801 @@
-legacysistema.github.io/rodrigocostafotografia
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#07070c">
+<title>Agenda — Rodrigo Costa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* ─── RESET & VARS ─────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#07070c;--bg2:#0c0c14;--bg3:#11111c;
+  --card:rgba(13,13,22,0.97);
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --gold:#d4a843;--gold2:#f0c96a;
+  --cyan:#00d9f5;--green:#00e49a;--wa:#25D366;
+  --text:#ededf4;--muted:#6e6e8a;
+  --shadow:0 32px 80px rgba(0,0,0,0.75);
+  --glow-gold:0 0 28px rgba(212,168,67,0.22),0 0 70px rgba(212,168,67,0.07);
+  --font-serif:'DM Serif Display',serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-ui:'Poppins',sans-serif;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);font-weight:400;line-height:1.6;
+  min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:.45;
+}
+body::after{
+  content:'';position:fixed;top:25%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(ellipse,rgba(212,168,67,0.05) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.header{
+  position:sticky;top:0;z-index:900;
+  background:rgba(7,7,12,0.88);
+  backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-bottom:1px solid rgba(212,168,67,0.10);
+  padding:0 20px;padding-top:var(--safe-top);
+  height:calc(60px + var(--safe-top));
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-family:var(--font-ui);font-size:17px;font-weight:400;color:rgba(255,255,255,0.88);display:flex;flex-direction:column;line-height:1.15;}
+.logo strong{font-weight:700;color:#fff;}
+.logo span{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:rgba(212,168,67,0.75);font-weight:400;}
+.header-wa{
+  font-size:13px;color:var(--muted);text-decoration:none;
+  display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-weight:500;
+  padding:8px 14px;border-radius:20px;border:1px solid rgba(37,211,102,0.18);
+  background:rgba(37,211,102,0.04);transition:all .2s;
+}
+.header-wa:hover,.header-wa:active{color:var(--wa);border-color:rgba(37,211,102,0.4);}
+.header-wa i{font-size:15px;color:var(--wa);}
+
+/* ─── PAGE ───────────────────────────────────────────────── */
+.page{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 14px calc(48px + var(--safe-bottom));
+  min-height:calc(100vh - 60px);
+}
+
+/* ─── CARD ───────────────────────────────────────────────── */
+.card{
+  background:var(--card);border:1px solid rgba(212,168,67,0.13);
+  border-radius:22px;width:100%;max-width:480px;
+  backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+  box-shadow:var(--shadow),0 0 0 1px rgba(255,255,255,0.025);
+  overflow:hidden;animation:fadeUp .35s ease;
+}
+.card-topbar{
+  height:3px;
+  background:linear-gradient(90deg,transparent 0%,rgba(212,168,67,0.3) 10%,var(--gold) 45%,var(--gold2) 55%,rgba(212,168,67,0.3) 90%,transparent 100%);
+}
+.card-inner{padding:26px 22px 30px;}
+
+/* ─── EYEBROW / TITLE ────────────────────────────────────── */
+.eyebrow{
+  display:flex;align-items:center;gap:7px;
+  font-size:10px;font-weight:700;color:var(--gold);
+  font-family:var(--font-ui);text-transform:uppercase;letter-spacing:1.3px;
+  margin-bottom:6px;
+}
+.eyebrow::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.4;}
+.card-title{font-family:var(--font-serif);font-size:22px;color:#fff;margin-bottom:4px;line-height:1.25;}
+.card-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+
+/* ─── BADGE REAGENDAMENTO ────────────────────────────────── */
+.badge-reagend{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;border-radius:12px;
+  background:rgba(0,217,245,0.05);border:1px solid rgba(0,217,245,0.18);
+  margin-bottom:20px;animation:fadeUp .3s ease;
+}
+.badge-reagend i{color:var(--cyan);font-size:15px;margin-top:2px;flex-shrink:0;}
+.badge-reagend p{font-size:12.5px;color:rgba(255,255,255,0.7);line-height:1.55;}
+.badge-reagend strong{color:var(--cyan);}
+
+/* ─── CALENDÁRIO ─────────────────────────────────────────── */
+.cal-wrap{margin-bottom:6px;}
+.cal-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.cal-month-label{
+  font-size:15px;font-weight:700;color:#fff;font-family:var(--font-ui);
+  letter-spacing:.2px;text-transform:capitalize;
+}
+.cal-arrow{
+  width:32px;height:32px;border-radius:9px;border:1px solid var(--border2);
+  background:rgba(255,255,255,.04);color:var(--muted);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;line-height:1;transition:all .18s;
+}
+.cal-arrow:hover{background:rgba(212,168,67,.08);color:var(--gold);border-color:rgba(212,168,67,.2);}
+.cal-arrow:active{background:rgba(212,168,67,.18);color:var(--gold);border-color:rgba(212,168,67,.35);}
+.cal-arrow:disabled,.cal-arrow[disabled]{opacity:.2;pointer-events:none;}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:3px;margin-bottom:14px;
+}
+.cal-wd{
+  text-align:center;font-size:10px;font-weight:700;
+  color:var(--muted);font-family:var(--font-ui);
+  letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 0 6px;
+}
+.cal-day{
+  aspect-ratio:1;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;font-family:var(--font-ui);
+  color:var(--muted);position:relative;transition:all .15s;
+}
+.cal-day.avail{
+  color:#fff;font-weight:700;cursor:pointer;
+  background:rgba(212,168,67,.09);
+  border:1px solid rgba(212,168,67,.22);
+}
+.cal-day.avail::after{
+  content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--gold);
+}
+.cal-day.avail:active{background:rgba(212,168,67,.22);}
+.cal-day.selected{
+  background:var(--gold) !important;color:#07070c !important;
+  border-color:var(--gold) !important;font-weight:800;
+  box-shadow:0 0 18px rgba(212,168,67,.35);
+}
+.cal-day.selected::after{display:none;}
+.cal-day.today:not(.avail){
+  color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.08);
+}
+.cal-vagas-info{
+  text-align:center;font-size:11px;color:var(--muted);
+  margin-top:4px;font-family:var(--font-ui);
+}
+.cal-vagas-info i{color:var(--gold);font-size:9px;margin-right:3px;}
+
+/* ─── PAINEL DE HORÁRIOS ─────────────────────────────────── */
+.times-panel{
+  padding:14px 16px 16px;
+  background:rgba(212,168,67,.05);
+  border:1px solid rgba(212,168,67,.18);
+  border-radius:14px;margin-top:14px;
+  display:none;animation:fadeUp .2s ease;
+}
+.times-panel.show{display:block;}
+.times-label{
+  font-size:11px;font-weight:700;color:var(--gold);
+  font-family:var(--font-ui);text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:10px;
+}
+.times-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.time-chip{
+  padding:8px 15px;border-radius:9px;
+  border:1px solid rgba(212,168,67,.25);
+  background:rgba(255,255,255,.03);
+  font-size:14px;font-weight:700;color:var(--text);font-family:var(--font-ui);
+  transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.time-chip i{font-size:10px;color:var(--gold);}
+
+/* ─── LOCAL & OBSERVAÇÕES ────────────────────────────────── */
+.times-loc{
+  font-size:12px;color:var(--muted);margin-bottom:10px;
+  display:flex;align-items:flex-start;gap:6px;
+}
+.times-loc a{color:var(--gold);text-decoration:none;}
+.times-loc i{color:var(--gold);font-size:10px;margin-top:3px;flex-shrink:0;}
+.times-obs{
+  padding:11px 14px;
+  background:rgba(212,168,67,0.05);border:1px solid rgba(212,168,67,0.15);
+  border-radius:11px;font-size:12px;color:var(--muted);
+  line-height:1.6;white-space:pre-wrap;word-break:break-word;margin-bottom:14px;
+}
+.times-obs-title{
+  font-size:10px;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--gold);font-weight:600;font-family:var(--font-ui);
+  margin-bottom:6px;display:flex;align-items:center;gap:5px;
+}
+
+/* ─── BOTÕES CTA ─────────────────────────────────────────── */
+.cta-row{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+.btn-wa{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:15px 20px;border-radius:13px;text-decoration:none;
+  border:1px solid rgba(37,211,102,.3);
+  background:rgba(37,211,102,.08);
+  font-size:14px;font-weight:700;color:#fff;
+  font-family:var(--font-ui);letter-spacing:.2px;
+  transition:all .2s;
+}
+.btn-wa:active{background:rgba(37,211,102,.18);border-color:var(--wa);}
+.btn-wa i{font-size:16px;color:var(--wa);}
+
+/* ─── LOADER ─────────────────────────────────────────────── */
+.loader{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:40px 0;color:var(--muted);font-size:13px;font-family:var(--font-ui);
+}
+.loader-spin{
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(212,168,67,.15);border-top-color:var(--gold);
+  animation:spin .8s linear infinite;flex-shrink:0;
+}
+
+/* ─── ESTADO VAZIO ───────────────────────────────────────── */
+.empty-state{
+  text-align:center;padding:36px 16px;color:var(--muted);
+  font-size:13.5px;line-height:1.7;
+}
+.empty-state i{font-size:36px;color:rgba(212,168,67,.3);display:block;margin-bottom:14px;}
+.empty-wa-btn{
+  display:inline-flex;align-items:center;gap:7px;margin-top:16px;
+  padding:11px 22px;border-radius:11px;
+  background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);
+  color:var(--wa);font-size:13px;font-weight:700;font-family:var(--font-ui);
+  text-decoration:none;transition:background .2s;
+}
+.empty-wa-btn:active{background:rgba(37,211,102,0.2);}
+
+/* ─── DIVIDER ────────────────────────────────────────────── */
+.divider{height:1px;background:var(--border);margin:18px 0;}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+.footer{
+  text-align:center;margin-top:24px;
+  font-size:11px;color:var(--muted);font-family:var(--font-ui);
+  letter-spacing:.3px;
+}
+
+@media(max-width:360px){
+  .card-inner{padding:20px 16px 24px;}
+  .cal-day{font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <strong>Rodrigo Costa</strong>
+    <span>Fotografia</span>
+  </div>
+  <a class="header-wa" id="headerWA" href="https://wa.me/5522992497662" target="_blank" rel="noopener">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </a>
+</header>
+
+<!-- PAGE -->
+<main class="page">
+  <div class="card">
+    <div class="card-topbar"></div>
+    <div class="card-inner">
+
+      <div class="eyebrow"><i class="fas fa-calendar-days"></i> Agenda</div>
+      <div class="card-title" id="pageTitle">Datas disponíveis</div>
+      <div class="card-sub" id="pageSub">Selecione um dia para ver os horários disponíveis.</div>
+
+      <!-- Badge reagendamento (oculto por padrão) -->
+      <div class="badge-reagend" id="badgeReagend" style="display:none;">
+        <i class="fas fa-rotate-left"></i>
+        <p id="badgeReagendText">Escolha abaixo uma nova data para o seu <strong>reagendamento</strong>.</p>
+      </div>
+
+      <!-- Calendário / Loader -->
+      <div id="calLoader" class="loader">
+        <div class="loader-spin"></div> Carregando agenda…
+      </div>
+      <div class="cal-wrap" id="calWrap" style="display:none;"></div>
+
+      <!-- Painel de horários -->
+      <div class="times-panel" id="timesPanel">
+        <div class="times-label" id="timesLabel"></div>
+        <div class="times-chips" id="timesChips"></div>
+        <div class="times-loc" id="timesLoc" style="display:none;"></div>
+        <div class="times-obs" id="timesObs" style="display:none;"></div>
+        <div class="cta-row">
+          <a class="btn-wa" id="btnWA" href="#" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Quero este horário — falar no WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">Rodrigo Costa Fotografia &nbsp;·&nbsp; Todos os direitos reservados</div>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURAÇÃO — lida da URL ou definida manualmente abaixo
+   ═══════════════════════════════════════════════════════════
+
+   Parâmetros aceitos na URL:
+     mes=4           → Abre (e trava) em Abril   (1-12)
+     ano=2026        → Ano do mês (padrão: ano atual)
+     meses=4,5       → Permite navegar entre Abril e Maio
+     cat=ensaio      → Filtra categoria (ensaio, evento…)
+     nome=João       → Nome do cliente (aparece no subtítulo)
+     fone=5522992497 → Número do WhatsApp do fotógrafo
+     reagend=1       → Mostra badge de reagendamento
+     periodo=120     → Dias a buscar na agenda (padrão 90)
+
+   Exemplos de link:
+     consulta-datas.html?mes=4&ano=2026&cat=ensaio&nome=Maria&reagend=1
+     consulta-datas.html?meses=4,5&cat=evento
+═══════════════════════════════════════════════════════════ */
+
+(function(){
+'use strict';
+
+/* ── Supabase ─────────────────────────────────────────── */
+var _su = atob('aHR0cHM6Ly9sZWRwcWN5bnZxYmRiY2NlYmhiby5zdXBhYmFzZS5jbw==');
+var _sk = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW14bFpIQnhZM2x1ZG5GaVpHSmpZMlZpYUdKdklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTnpBek9EYzNNamdzSW1WNGNDSTZNakE0TlRrMk16Y3lPSDAuczhHT3pwNHdvdWpHdURjNHZLOVFYSWYzY1dMTUVOVW5KZkU0bHRfWWhMZw==');
+var _db = window.supabase.createClient(_su, _sk);
+
+/* ── URL Params ───────────────────────────────────────── */
+var _p   = new URLSearchParams(location.search);
+var hoje = new Date();
+
+var CFG = {
+  /* mês único: 1=Jan … 12=Dez  (0 = sem trava) */
+  mesTravado : parseInt(_p.get('mes') || '0', 10),
+  /* lista de meses permitidos ex: "4,5" */
+  mesesLista : (_p.get('meses') || '').split(',').map(Number).filter(Boolean),
+  /* ano (padrão: ano atual) */
+  ano        : parseInt(_p.get('ano') || hoje.getFullYear(), 10),
+  /* categoria Supabase */
+  cat        : (_p.get('cat') || '').trim(),
+  /* nome do cliente */
+  nome       : (_p.get('nome') || '').trim(),
+  /* WhatsApp do fotógrafo */
+  fone       : (_p.get('fone') || '5522992497662').replace(/\D/g,''),
+  /* modo reagendamento */
+  reagend    : _p.get('reagend') === '1',
+  /* dias de lookahead */
+  periodo    : parseInt(_p.get('periodo') || '90', 10)
+};
+
+/* ── Estado do calendário ─────────────────────────────── */
+var _state = {
+  slotMap  : {},       /* { 'YYYY-MM-DD': [{horario, localizacao, observacoes}] } */
+  calYear  : 0,
+  calMonth : 0,        /* 0-11 */
+  selDay   : null,
+  minM     : null,     /* { y, m } menor mês com vagas */
+  maxM     : null      /* { y, m } maior mês com vagas */
+};
+
+/* ── Constantes ───────────────────────────────────────── */
+var MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+             'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var MESES_MIN = ['jan','fev','mar','abr','mai','jun',
+                 'jul','ago','set','out','nov','dez'];
+var DSEM  = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+var DIAS  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+/* ── Helpers ──────────────────────────────────────────── */
+function ge(id){ return document.getElementById(id); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function dateStr(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function normStr(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+
+/* ── Determina meses permitidos ───────────────────────── */
+function getMesesPermitidos(){
+  /* se passou lista: usa ela */
+  if(CFG.mesesLista.length){
+    return CFG.mesesLista.map(function(m){ return { y: CFG.ano, m: m-1 }; });
+  }
+  /* se passou mês único: lista com um item */
+  if(CFG.mesTravado){
+    return [{ y: CFG.ano, m: CFG.mesTravado-1 }];
+  }
+  /* sem trava: null = todos */
+  return null;
+}
+var _mesesPermitidos = getMesesPermitidos(); /* null = livre */
+
+/* ── Verifica se mês é permitido ──────────────────────── */
+function isMesPermitido(y, m){
+  if(!_mesesPermitidos) return true;
+  return _mesesPermitidos.some(function(p){ return p.y===y && p.m===m; });
+}
+
+/* ── Inicializa UI ────────────────────────────────────── */
+function initUI(){
+  /* título e subtítulo */
+  if(CFG.nome){
+    ge('pageTitle').textContent = 'Olá, ' + CFG.nome + ' 👋';
+    ge('pageSub').textContent   = 'Selecione um dia para ver os horários disponíveis.';
+  }
+  /* modo reagendamento */
+  if(CFG.reagend){
+    var el = ge('badgeReagend');
+    el.style.display = 'flex';
+    var txt = CFG.nome
+      ? 'Escolha abaixo uma nova data para o seu <strong>reagendamento</strong>, ' + esc(CFG.nome) + '.'
+      : 'Escolha abaixo uma nova data para o seu <strong>reagendamento</strong>.';
+    ge('badgeReagendText').innerHTML = txt;
+  }
+  /* WhatsApp no header */
+  ge('headerWA').href = 'https://wa.me/' + CFG.fone;
+}
+
+/* ── Filtra regras por categoria ──────────────────────── */
+function filterRegras(regras, cat){
+  if(!regras.length) return [];
+  if(!cat) return regras;
+  var cn = normStr(cat);
+  var exact   = regras.filter(function(r){ return normStr(r.tipo)===cn; });
+  if(exact.length) return exact;
+  var cnIsEns = cn.includes('ensaio')||cn.includes('familia')||cn.includes('teen')||cn.includes('adulto')||cn.includes('profissional')||cn.includes('infantil');
+  var cnIsEv  = cn.includes('evento')||cn.includes('aniversario')||cn.includes('debutante')||cn.includes('tradicional')||cn.includes('festare');
+  var partial = regras.filter(function(r){
+    var tn=normStr(r.tipo);
+    var tnIsEns=tn.includes('ensaio');
+    var tnIsEv=tn.includes('evento')||tn.includes('aniversario')||tn.includes('tradicional')||tn.includes('festare')||tn.includes('debutante');
+    if(cnIsEns&&tnIsEv) return false;
+    if(cnIsEv&&tnIsEns) return false;
+    return cn.includes(tn)||tn.includes(cn);
+  });
+  if(partial.length) return partial;
+  var broad = regras.filter(function(r){
+    var tn=normStr(r.tipo);
+    var tnIsEns=tn.includes('ensaio')||tn==='ensaio';
+    var tnIsEv=tn.includes('evento')||tn==='evento';
+    if(cnIsEns) return tnIsEns&&!tnIsEv;
+    if(cnIsEv)  return tnIsEv&&!tnIsEns;
+    return false;
+  });
+  return broad.length ? broad : regras;
+}
+
+/* ── Busca disponibilidade (rule-based) ───────────────── */
+function getDisponibilidade(periodo, cat){
+  var inicio   = new Date();
+  var inicioStr= dateStr(inicio);
+  var fim      = new Date(inicio); fim.setDate(fim.getDate()+periodo);
+  var fimStr   = dateStr(fim);
+
+  /* Aplica filtro de meses permitidos no range de busca */
+  if(_mesesPermitidos && _mesesPermitidos.length){
+    /* Calcula start do primeiro mês permitido e end do último */
+    var sorted = _mesesPermitidos.slice().sort(function(a,b){ return (a.y*12+a.m)-(b.y*12+b.m); });
+    var pStart = new Date(sorted[0].y, sorted[0].m, 1);
+    var last   = sorted[sorted.length-1];
+    var pEnd   = new Date(last.y, last.m+1, 0); /* último dia */
+    /* não vai além do período máximo */
+    if(pEnd > fim) pEnd = fim;
+    if(pStart > inicio) inicio = pStart;
+    inicioStr = dateStr(inicio);
+    fimStr    = dateStr(pEnd);
+  }
+
+  var q1 = _db.from('agenda_regras')
+    .select('id,tipo,dias_semana,horarios,localizacao,localizacao_link,observacoes,ativo')
+    .eq('ativo',true)
+    .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
+
+  var q2 = _db.from('agenda_excecoes')
+    .select('data,horario,bloqueado')
+    .gte('data',inicioStr).lte('data',fimStr)
+    .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
+
+  var q3 = _db.from('agendamentos_clientes')
+    .select('data,horario,status')
+    .gte('data',inicioStr).lte('data',fimStr)
+    .neq('status','cancelado')
+    .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
+
+  return Promise.all([q1,q2,q3]).then(function(res){
+    var regras    = filterRegras(res[0], cat);
+    var excecoes  = res[1];
+    var agendados = res[2];
+
+    var excSet={}, bookSet={};
+    excecoes.forEach(function(e){
+      if(!e.bloqueado) return;
+      var k = e.data+'_'+(e.horario?e.horario.substring(0,5):'*');
+      excSet[k]=true;
+    });
+    agendados.forEach(function(a){
+      bookSet[a.data+'_'+(a.horario||'').substring(0,5)]=true;
+    });
+
+    var slots=[], seen={};
+    var cur = new Date(inicio);
+    var fim2= new Date(fimStr+'T00:00:00');
+
+    while(cur<=fim2){
+      var ds    = dateStr(cur);
+      var diaSem= cur.getDay();
+
+      regras.forEach(function(regra){
+        var dias,hors;
+        try{
+          dias=Array.isArray(regra.dias_semana)?regra.dias_semana:JSON.parse(regra.dias_semana||'[]');
+          hors=Array.isArray(regra.horarios)?regra.horarios:JSON.parse(regra.horarios||'[]');
+        }catch(_){ return; }
+        if(!dias.map(Number).includes(diaSem)) return;
+        hors.forEach(function(h){
+          var hs=String(h).substring(0,5);
+          var key=ds+'_'+hs;
+          if(excSet[ds+'_*']||excSet[key]) return;
+          if(bookSet[key]) return;
+          if(seen[key]) return;
+          seen[key]=true;
+          slots.push({
+            data:ds, horario:hs,
+            localizacao     : regra.localizacao||null,
+            localizacao_link: regra.localizacao_link||null,
+            observacoes     : regra.observacoes||null
+          });
+        });
+      });
+      cur.setDate(cur.getDate()+1);
+    }
+    slots.sort(function(a,b){ return (a.data+a.horario).localeCompare(b.data+b.horario); });
+    return slots;
+  });
+}
+
+/* ── Monta slotMap ────────────────────────────────────── */
+function buildSlotMap(slots){
+  var map={};
+  slots.forEach(function(s){
+    if(!map[s.data]) map[s.data]=[];
+    map[s.data].push(s);
+  });
+  return map;
+}
+
+/* ── Calcula min/max meses com vaga ───────────────────── */
+function calcMinMax(slotMap){
+  var months = Object.keys(slotMap).map(function(d){
+    var p=d.split('-'); return { y:+p[0], m:+p[1]-1 };
+  });
+  if(!months.length) return { min:null, max:null };
+  var min = months.reduce(function(a,b){ return (a.y*12+a.m)<=(b.y*12+b.m)?a:b; });
+  var max = months.reduce(function(a,b){ return (a.y*12+a.m)>=(b.y*12+b.m)?a:b; });
+  return { min:min, max:max };
+}
+
+/* ── Renderiza calendário ─────────────────────────────── */
+function renderCal(){
+  var wrap  = ge('calWrap');
+  var today = new Date(); today.setHours(0,0,0,0);
+  var y = _state.calYear, m = _state.calMonth;
+
+  /* limites de navegação */
+  var minM = _state.minM, maxM = _state.maxM;
+
+  /* se meses travados, limita navegação ao permitido com vagas */
+  if(_mesesPermitidos){
+    var permComVaga = _mesesPermitidos.filter(function(p){
+      var mk = p.y+'-'+pad(p.m+1);
+      return Object.keys(_state.slotMap).some(function(d){ return d.startsWith(mk); });
+    });
+    if(permComVaga.length){
+      minM = permComVaga.reduce(function(a,b){ return (a.y*12+a.m)<=(b.y*12+b.m)?a:b; });
+      maxM = permComVaga.reduce(function(a,b){ return (a.y*12+a.m)>=(b.y*12+b.m)?a:b; });
+    }
+  }
+
+  if(!minM) minM = { y:y, m:m };
+  if(!maxM) maxM = { y:y, m:m };
+
+  /* corrige posição se fora do range */
+  if((y*12+m)<(minM.y*12+minM.m)){ y=minM.y; m=minM.m; _state.calYear=y; _state.calMonth=m; }
+  if((y*12+m)>(maxM.y*12+maxM.m)){ y=maxM.y; m=maxM.m; _state.calYear=y; _state.calMonth=m; }
+
+  var isPrevDis = (y*12+m)<=(minM.y*12+minM.m);
+  var isNextDis = (y*12+m)>=(maxM.y*12+maxM.m);
+
+  /* se mês travado E só um mês: esconde setas */
+  var hideArrows = (_mesesPermitidos && _mesesPermitidos.length===1);
+
+  var firstDay    = new Date(y,m,1).getDay();
+  var daysInMonth = new Date(y,m+1,0).getDate();
+
+  var html = '<div class="cal-nav">';
+  if(hideArrows){
+    html += '<div style="width:32px;"></div>';
+  } else {
+    html += '<button class="cal-arrow" id="btnPrev" onclick="calPrev()"'+(isPrevDis?' disabled':'')+'>&#8249;</button>';
+  }
+  html += '<span class="cal-month-label">'+MESES[m]+' '+y+'</span>';
+  if(hideArrows){
+    html += '<div style="width:32px;"></div>';
+  } else {
+    html += '<button class="cal-arrow" id="btnNext" onclick="calNext()"'+(isNextDis?' disabled':'')+'>&#8250;</button>';
+  }
+  html += '</div><div class="cal-grid">';
+
+  DIAS.forEach(function(d){ html += '<div class="cal-wd">'+d+'</div>'; });
+
+  for(var e=0;e<firstDay;e++) html += '<div class="cal-day"></div>';
+
+  for(var day=1;day<=daysInMonth;day++){
+    var mm  = pad(m+1), dd = pad(day);
+    var ds  = y+'-'+mm+'-'+dd;
+    var dt  = new Date(y,m,day); dt.setHours(0,0,0,0);
+    var isAvail  = !!_state.slotMap[ds] && dt>=today;
+    var isToday  = dt.getTime()===today.getTime();
+    var isSel    = _state.selDay===ds;
+    var cls = 'cal-day'+(isAvail?' avail':'')+(isToday?' today':'')+(isSel?' selected':'');
+    var cb  = isAvail ? ' onclick="selectDay(\''+ds+'\')"' : '';
+    html += '<div class="'+cls+'" id="cd-'+ds+'"'+cb+'>'+day+'</div>';
+  }
+  html += '</div>';
+
+  /* rodapé com contagem */
+  var mk = y+'-'+pad(m+1);
+  var diasComVaga = Object.keys(_state.slotMap).filter(function(d){ return d.startsWith(mk); }).length;
+  if(diasComVaga>0){
+    html += '<div class="cal-vagas-info"><i class="fas fa-circle-dot"></i>'
+      + diasComVaga+(diasComVaga===1?' dia disponível neste mês':' dias disponíveis neste mês')
+      + '</div>';
+  } else {
+    var msgSemVaga = hideArrows
+      ? 'Nenhuma vaga disponível neste mês. Entre em contato pelo WhatsApp.'
+      : 'Sem vagas neste mês. Navegue para o próximo ›';
+    html += '<div class="cal-vagas-info" style="color:rgba(255,255,255,.3);">'+msgSemVaga+'</div>';
+  }
+
+  wrap.innerHTML = html;
+}
+
+/* ── Navegação ────────────────────────────────────────── */
+window.calPrev = function(){
+  _state.calMonth--;
+  if(_state.calMonth<0){ _state.calMonth=11; _state.calYear--; }
+  _state.selDay=null;
+  ge('timesPanel').classList.remove('show');
+  renderCal();
+};
+window.calNext = function(){
+  _state.calMonth++;
+  if(_state.calMonth>11){ _state.calMonth=0; _state.calYear++; }
+  _state.selDay=null;
+  ge('timesPanel').classList.remove('show');
+  renderCal();
+};
+
+/* ── Seleciona dia ────────────────────────────────────── */
+window.selectDay = function(ds){
+  _state.selDay=ds;
+
+  ge('calWrap').querySelectorAll('.cal-day.selected')
+    .forEach(function(d){ d.classList.remove('selected'); });
+  var el=ge('cd-'+ds); if(el) el.classList.add('selected');
+
+  var slotsForDay = _state.slotMap[ds]||[];
+  var parts = ds.split('-').map(Number);
+  var dt    = new Date(parts[0],parts[1]-1,parts[2]);
+
+  ge('timesLabel').textContent = DSEM[dt.getDay()]+', '+parts[2]+' de '+MESES[parts[1]-1];
+
+  /* chips de horário */
+  ge('timesChips').innerHTML = slotsForDay.map(function(s){
+    return '<div class="time-chip"><i class="fas fa-clock"></i>'+esc(s.horario.substring(0,5))+'</div>';
+  }).join('');
+
+  /* localização */
+  var loc   = slotsForDay[0]&&slotsForDay[0].localizacao;
+  var locLnk= slotsForDay[0]&&slotsForDay[0].localizacao_link;
+  var locEl = ge('timesLoc');
+  if(loc){
+    locEl.innerHTML='<i class="fas fa-location-dot"></i>'
+      +(locLnk?'<a href="'+esc(locLnk)+'" target="_blank" rel="noopener">'+esc(loc)+'</a>':esc(loc));
+    locEl.style.display='flex';
+  } else { locEl.style.display='none'; }
+
+  /* observações */
+  var obs   = slotsForDay[0]&&slotsForDay[0].observacoes;
+  var obsEl = ge('timesObs');
+  if(obs&&obs.trim()){
+    obsEl.innerHTML='<div class="times-obs-title"><i class="fas fa-circle-info"></i> Orientações</div>'+esc(obs.trim());
+    obsEl.style.display='block';
+  } else { obsEl.style.display='none'; }
+
+  /* link WhatsApp */
+  var dataFmt  = DSEM[dt.getDay()]+', '+parts[2]+' de '+MESES_MIN[parts[1]-1];
+  var horasStr = slotsForDay.map(function(s){ return s.horario.substring(0,5); }).join(' / ');
+  var reagTxt  = CFG.reagend ? ' Gostaria de *reagendar* para ' : ' Gostaria de agendar para ';
+  var nomeTxt  = CFG.nome ? ' Sou ' + CFG.nome + '.' : '';
+  var catTxt   = CFG.cat  ? ' ('+CFG.cat+')' : '';
+  var msg = encodeURIComponent(
+    'Olá! Vi as datas disponíveis no site'+catTxt+'.'+nomeTxt+'\n'
+    + reagTxt + '*' + dataFmt + '*'
+    + ' (horários: ' + horasStr + ').\n'
+    + 'Pode confirmar? 😊'
+  );
+  ge('btnWA').href = 'https://wa.me/'+CFG.fone+'?text='+msg;
+
+  ge('timesPanel').classList.add('show');
+
+  setTimeout(function(){
+    var panel=ge('timesPanel');
+    if(panel) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 120);
+};
+
+/* ── Ponto de entrada ─────────────────────────────────── */
+function init(){
+  initUI();
+
+  getDisponibilidade(CFG.periodo, CFG.cat)
+    .then(function(slots){
+      ge('calLoader').style.display = 'none';
+
+      _state.slotMap = buildSlotMap(slots);
+      var minMax     = calcMinMax(_state.slotMap);
+
+      _state.minM = minMax.min;
+      _state.maxM = minMax.max;
+
+      /* define mês inicial */
+      if(_mesesPermitidos && _mesesPermitidos.length){
+        /* abre no primeiro mês permitido (que tenha ou não vagas) */
+        _state.calYear  = _mesesPermitidos[0].y;
+        _state.calMonth = _mesesPermitidos[0].m;
+      } else if(minMax.min){
+        /* sem trava: abre no mês atual (ou primeiro com vaga se já passou) */
+        var now = new Date();
+        _state.calYear  = now.getFullYear();
+        _state.calMonth = now.getMonth();
+      } else {
+        var now2 = new Date();
+        _state.calYear  = now2.getFullYear();
+        _state.calMonth = now2.getMonth();
+      }
+
+      ge('calWrap').style.display = 'block';
+      renderCal();
+    })
+    .catch(function(){
+      ge('calLoader').style.display = 'none';
+      ge('calWrap').style.display   = 'block';
+      ge('calWrap').innerHTML =
+        '<div class="empty-state">'
+        +'<i class="fas fa-wifi"></i>'
+        +'Não foi possível carregar a agenda.<br>'
+        +'<a class="empty-wa-btn" href="https://wa.me/'+CFG.fone+'" target="_blank" rel="noopener">'
+        +'<i class="fab fa-whatsapp"></i> Falar no WhatsApp</a></div>';
+    });
+}
+
+init();
+
+})(); /* fim IIFE */
+</script>
+</body>
+</html>
