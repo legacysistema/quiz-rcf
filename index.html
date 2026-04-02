@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#07070c">
-<title>Reagenda — Rodrigo Costa Fotografia</title>
+<title>Agenda — Rodrigo Costa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -373,6 +373,8 @@ var CFG = {
   ano        : parseInt(_p.get('ano') || hoje.getFullYear(), 10),
   /* categoria Supabase */
   cat        : (_p.get('cat') || '').trim(),
+  /* pacote_id ou slug da URL */
+  pacote     : (_p.get('pacote') || '').trim() || null,
   /* nome do cliente */
   nome       : (_p.get('nome') || '').trim(),
   /* WhatsApp do fotógrafo */
@@ -479,7 +481,8 @@ function filterRegras(regras, cat){
 }
 
 /* ── Busca disponibilidade (rule-based) ───────────────── */
-function getDisponibilidade(periodo, cat){
+function getDisponibilidade(periodo, cat, pacoteId){
+  pacoteId = (pacoteId != null && pacoteId !== '') ? pacoteId : null; // null-safe
   var inicio   = new Date();
   var inicioStr= dateStr(inicio);
   var fim      = new Date(inicio); fim.setDate(fim.getDate()+periodo);
@@ -517,7 +520,7 @@ function getDisponibilidade(periodo, cat){
 
   // Bloqueios recorrentes cadastrados no ADM (por categoria/pacote/dia da semana)
   var q4 = _db.from('agenda_bloqueios_recorrentes')
-    .select('dias_semana,horarios_bloqueados,data_inicio,data_fim,categoria,pacote_nome,ativo')
+    .select('dias_semana,horarios_bloqueados,data_inicio,data_fim,categoria,pacote_id,pacote_nome,ativo')
     .eq('ativo',true)
     .then(function(r){ return r.data||[]; }).catch(function(){ return []; });
 
@@ -538,18 +541,33 @@ function getDisponibilidade(periodo, cat){
     });
 
     // Verifica se um slot está coberto por algum bloqueio recorrente do ADM
+    // Prioridade: pacote_id específico > bloqueio geral da categoria
     function _isBloqRec(ds, horario){
       var parts  = ds.split('-').map(Number);
       var diaSem = new Date(parts[0], parts[1]-1, parts[2]).getDay();
+      var cPacoteId = (pacoteId != null) ? String(pacoteId) : null;
       for(var bi=0; bi<bloqRecs.length; bi++){
         var b = bloqRecs[bi];
+        // [1] Dupla garantia: ignorar inativos
+        if(!b.ativo) continue;
+        // [2] Período de vigência
         if(b.data_inicio && ds<b.data_inicio) continue;
         if(b.data_fim    && ds>b.data_fim)    continue;
+        // [3] Dia da semana
         var dias; try{ dias=Array.isArray(b.dias_semana)?b.dias_semana:JSON.parse(b.dias_semana||'[]'); }catch(_){ continue; }
         if(!dias.map(Number).includes(diaSem)) continue;
+        // [4] Horário (lista vazia = bloqueia o dia inteiro)
         var hbs; try{ hbs=Array.isArray(b.horarios_bloqueados)?b.horarios_bloqueados:JSON.parse(b.horarios_bloqueados||'[]'); }catch(_){ hbs=[]; }
         var horOk = hbs.length===0 || hbs.some(function(h){ return String(h).substring(0,5)===String(horario).substring(0,5); });
         if(!horOk) continue;
+        // [5] LÓGICA DE PRIORIDADE: pacote_id tem precedência sobre categoria
+        var bPacoteId = (b.pacote_id != null) ? String(b.pacote_id) : null;
+        if(bPacoteId !== null){
+          // Bloqueio específico: só aplica se o pacote atual for exatamente o mesmo
+          if(cPacoteId === null || bPacoteId !== cPacoteId) continue;
+          return true; // pacote bate → bloqueia
+        }
+        // Bloqueio geral da categoria (pacote_id null)
         if(b.categoria && cat){
           var bc=(b.categoria||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
           var cc=(cat||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
@@ -784,7 +802,7 @@ window.selectDay = function(ds){
 function init(){
   initUI();
 
-  getDisponibilidade(CFG.periodo, CFG.cat)
+  getDisponibilidade(CFG.periodo, CFG.cat, CFG.pacote)
     .then(function(slots){
       ge('calLoader').style.display = 'none';
 
